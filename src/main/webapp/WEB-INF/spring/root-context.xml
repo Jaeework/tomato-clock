@@ -7,6 +7,8 @@
                            http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring.xsd
                            http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
 
+    <context:component-scan base-package="com.tomatoclock.service"  />
+
     <!-- spring-jdbc 모듈의 클래스를 이용해서 DataSource 추가 -->
     <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 <!--        <property name="driverClassName" value="net.sf.log4jdbc.sql.jdbcapi.DriverSpy"></property>-->

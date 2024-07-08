@@ -1,0 +1,25 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tomatoclock.mapper.UserSettingMapper">
+
+    <insert id="insertUserSetting">
+        INSERT INTO tbl_user_setting (userid, duration, txtColor, bgColor, bgImgUuid, bgImgName)
+        VALUES (#{userId}, #{duration}, #{txtColor}, #{bgColor}, #{bgImgUuid}, #{bgImgName})
+    </insert>
+
+    <insert id="insertUserSettingSelectKey">
+        INSERT INTO tbl_user_setting (userid, duration, txtColor, bgColor, bgImgUuid, bgImgName)
+        VALUES (#{userId}, #{duration}, #{txtColor}, #{bgColor}, #{bgImgUuid}, #{bgImgName})
+
+        <selectKey keyProperty="id" order="AFTER" resultType="long">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+
+    </insert>
+
+    <select id="selectUserSetting" parameterType="string" resultType="com.tomatoclock.domain.UserSettingVO">
+        SELECT * FROM tbl_user_setting WHERE userid = #{userId}
+    </select>
+
+</mapper>

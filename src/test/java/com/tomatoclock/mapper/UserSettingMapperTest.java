@@ -34,6 +34,23 @@ public class UserSettingMapperTest {
     }
 
     @Test
+    public void testInsertSelectKey() {
+
+        UserSettingVO setting = new UserSettingVO();
+        setting.setUserId("user00");
+        setting.setDuration(25);
+        setting.setTxtColor("#ff69b4");
+        setting.setBgColor("#000000");
+        setting.setBgImgUuid(null);
+        setting.setBgImgName(null);
+
+        mapper.insertUserSettingSelectKey(setting);
+
+        log.info(setting);
+
+    }
+
+    @Test
     public void testSelect() {
 
         UserSettingVO setting = mapper.selectUserSetting("user00");

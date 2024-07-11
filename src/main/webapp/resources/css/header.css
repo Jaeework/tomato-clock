@@ -1,0 +1,26 @@
+
+/* === Navbar === */
+
+.navbar {
+    background-color: #293037ab;
+}
+
+.settings-icon, .user-icon {
+    font-size: 1.5em;
+    color: var(--color-font);
+    cursor: pointer;
+}
+
+.settings-dropdown-menu {
+    min-width: 300px;
+    padding: 10px;
+    font-size: 1.1em;
+}
+.settings-dropdown-menu .form-control {
+    margin-bottom: 15px;
+}
+
+img {
+    width: 3rem;
+    height: 3rem;
+}

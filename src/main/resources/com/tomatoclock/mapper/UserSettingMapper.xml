@@ -4,13 +4,13 @@
 <mapper namespace="com.tomatoclock.mapper.UserSettingMapper">
 
     <insert id="insertUserSetting">
-        INSERT INTO tbl_user_setting (userid, duration, txtColor, bgColor, bgImgUuid, bgImgName)
-        VALUES (#{userId}, #{duration}, #{txtColor}, #{bgColor}, #{bgImgUuid}, #{bgImgName})
+        INSERT INTO tbl_user_setting (userid, duration, txtColor, shadowColor, bgColor, bgImgUuid, bgImgName)
+        VALUES (#{userId}, #{duration}, #{txtColor}, #{shadowColor}, #{bgColor}, #{bgImgUuid}, #{bgImgName})
     </insert>
 
     <insert id="insertUserSettingSelectKey">
-        INSERT INTO tbl_user_setting (userid, duration, txtColor, bgColor, bgImgUuid, bgImgName)
-        VALUES (#{userId}, #{duration}, #{txtColor}, #{bgColor}, #{bgImgUuid}, #{bgImgName})
+        INSERT INTO tbl_user_setting (userid, duration, txtColor, shadowColor, bgColor, bgImgUuid, bgImgName)
+        VALUES (#{userId}, #{duration}, #{txtColor}, #{shadowColor}, #{bgColor}, #{bgImgUuid}, #{bgImgName})
 
         <selectKey keyProperty="id" order="AFTER" resultType="long">
             SELECT LAST_INSERT_ID()

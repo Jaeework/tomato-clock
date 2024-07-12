@@ -9,6 +9,7 @@ public class UserSettingVO {
     private String userId;
     private int duration;
     private String txtColor;
+    private String shadowColor;
     private String bgColor;
     private String bgImgUuid;
     private String bgImgName;

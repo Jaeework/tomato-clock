@@ -24,7 +24,8 @@ public class UserSettingMapperTests {
         setting.setUserId("user00");
         setting.setDuration(25);
         setting.setTxtColor("#ff69b4");
-        setting.setBgColor("#000000");
+        setting.setShadowColor("#393e79");
+        setting.setBgColor("#1f2241");
         setting.setBgImgUuid(null);
         setting.setBgImgName(null);
 
@@ -40,7 +41,8 @@ public class UserSettingMapperTests {
         setting.setUserId("user00");
         setting.setDuration(25);
         setting.setTxtColor("#ff69b4");
-        setting.setBgColor("#000000");
+        setting.setShadowColor("#393e79");
+        setting.setBgColor("#1f2241");
         setting.setBgImgUuid(null);
         setting.setBgImgName(null);
 

@@ -22,6 +22,12 @@ public class UserSettingServiceTests {
 
         UserSettingVO userSetting = new UserSettingVO();
         userSetting.setUserId("user1");
+        userSetting.setDuration(25);
+        userSetting.setTxtColor("#ff69b4");
+        userSetting.setShadowColor("#393e79");
+        userSetting.setBgColor("#1f2241");
+        userSetting.setBgImgUuid(null);
+        userSetting.setBgImgName(null);
 
         service.createUserSetting(userSetting);
 

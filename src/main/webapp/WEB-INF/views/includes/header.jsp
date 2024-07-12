@@ -13,7 +13,7 @@
 
     <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">TomatoClock</a>
+            <a class="navbar-brand" href="#"><h1>TomatoClock</h1></a>
             <div class="ml-auto">
                 <!-- Settings Dropdown -->
                 <div class="dropdown d-inline dropstart">
@@ -27,17 +27,17 @@
                                 <button type="button" class="btn btn-primary float-end mt-2" id="applyDuration">Apply</button>
                                 <select class="form-control" id="duration">
                                   <c:forEach var="i" begin="10" end="60" step="5">
-                                    <option value="${i}">${i}</option>
+                                      <option value="${i}" ${i == 25 ? 'selected' : ''}>${i}</option>
                                   </c:forEach>
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label for="backgroundColor" class="form-label">Background Color:</label>
-                                <input type="color" class="form-control form-control-color" id="backgroundColor" value="#000000">
+                                <input type="color" class="form-control form-control-color" id="backgroundColor" value="#1f2241">
                             </div>
                             <div class="form-group">
                                 <label for="shadowColor" class="form-label">Shadow Color:</label>
-                                <input type="color" class="form-control form-control-color" id="shadowColor" value="#5a5a5a">
+                                <input type="color" class="form-control form-control-color" id="shadowColor" value="#393e79">
                             </div>
                             <div class="form-group">
                                 <label for="textColor" class="form-label">Text Color:</label>
@@ -55,8 +55,9 @@
                 <!-- User Dropdown -->
                 <div class="dropstart dropdown d-inline dropstart">
                     <span class="user-icon" id="userDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <img src="/resources/img/profile-icon.png" alt="profile icon"></span>
-                    <div class="dropdown-menu" aria-labelledby="userDropdown">
+                        <img src="/resources/img/profile-icon.png" alt="profile icon">
+                    </span>
+                    <div class="dropdown-menu user-dropdown-menu" aria-labelledby="userDropdown">
                         <a class="dropdown-item" href="#">Profile</a>
                         <a class="dropdown-item" href="#">Statistics</a>
                         <div class="dropdown-divider"></div>

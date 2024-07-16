@@ -3,19 +3,16 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.tomatoclock.mapper.UserSettingMapper">
 
-    <insert id="insertUserSetting">
-        INSERT INTO tbl_user_setting (userid, duration, txtColor, bgColor, bgImgUuid, bgImgName)
-        VALUES (#{userId}, #{duration}, #{txtColor}, #{bgColor}, #{bgImgUuid}, #{bgImgName})
-    </insert>
-
-    <insert id="insertUserSettingSelectKey">
-        INSERT INTO tbl_user_setting (userid, duration, txtColor, bgColor, bgImgUuid, bgImgName)
-        VALUES (#{userId}, #{duration}, #{txtColor}, #{bgColor}, #{bgImgUuid}, #{bgImgName})
-
-        <selectKey keyProperty="id" order="AFTER" resultType="long">
-            SELECT LAST_INSERT_ID()
-        </selectKey>
-
+    <insert id="saveUserSetting">
+        INSERT INTO tbl_user_setting (userid, duration, txtColor, shadowColor, bgColor, bgImgUuid, bgImgName)
+        VALUES (#{userId}, #{duration}, #{txtColor}, #{shadowColor}, #{bgColor}, #{bgImgUuid}, #{bgImgName})
+            ON DUPLICATE KEY UPDATE
+                                 duration=#{duration},
+                                 txtColor=#{txtColor},
+                                 shadowColor=#{shadowColor},
+                                 bgColor=#{bgColor},
+                                 bgImgUuid=#{bgImgUuid},
+                                 bgImgName=#{bgImgName}
     </insert>
 
     <select id="selectUserSetting" parameterType="string" resultType="com.tomatoclock.domain.UserSettingVO">

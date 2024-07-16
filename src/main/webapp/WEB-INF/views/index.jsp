@@ -7,42 +7,48 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TomatoClock</title>
+
     <!-- Bootstrap -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            background-color: #000;
-            color: hotpink;
-            text-align: center;
-        }
-        .timer {
-            font-size: 5em;
-            margin-top: 20%;
-        }
-        .settings-icon, .user-icon {
-            font-size: 1.5em;
-            color: white;
-            cursor: pointer;
-        }
-        .settings-modal .modal-body {
-            color: black;
-        }
-    </style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- css -->
+    <link rel="stylesheet" href="/resources/css/index.css">
 </head>
 <body>
-<!-- Include header.jsp -->
-<jsp:include page="includes/header.jsp" />
 
-<!-- Timer Display -->
-<div class="timer">
-    <span id="timerDisplay">25:00</span>
-</div>
+    <!-- Include header.jsp -->
+    <jsp:include page="includes/header.jsp" />
 
-<!-- Timer Controls -->
-<div class="mt-4">
-    <button id="startButton" class="btn btn-success">Start</button>
-    <button id="stopButton" class="btn btn-danger" style="display:none;">Stop</button>
-</div>
+    <section>
+        <div class="container">
+
+            <!-- Timer Display -->
+            <div class="timer">
+                <div class="timerDisplay">
+                    <p id="minutes">25</p>
+                    <p>:</p>
+                    <p id="seconds">00</p>
+                </div>
+            </div>
+
+            <!-- Timer Controls -->
+            <div class="controls">
+                <button id="startButton" >Start</button>
+
+                <button id="stopButton" >Stop</button>
+
+                <button id="resetButton">Reset</button>
+            </div>
+
+        </div>
+    </section>
+    <!-- JQuery, Popper.js, Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+
+    <!-- script -->
+    <script src="/resources/js/script.js"></script>
 
 </body>
 </html>

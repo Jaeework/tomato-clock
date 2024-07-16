@@ -4,7 +4,7 @@ import com.tomatoclock.domain.UserSettingVO;
 
 public interface UserSettingService {
 
-    public void createUserSetting(UserSettingVO userSettings);
+    public int saveUserSetting(UserSettingVO userSetting);
 
     public UserSettingVO getUserSettingByUserId(String userId);
 

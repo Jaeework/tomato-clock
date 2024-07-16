@@ -14,12 +14,13 @@ public class UserSettingServiceImpl implements UserSettingService{
     private UserSettingMapper mapper;
 
     @Override
-    public void createUserSetting(UserSettingVO userSetting) {
-        mapper.insertUserSettingSelectKey(userSetting);
+    public int saveUserSetting(UserSettingVO userSetting) {
+        return mapper.saveUserSetting(userSetting);
     }
 
     @Override
     public UserSettingVO getUserSettingByUserId(String userId) {
         return mapper.selectUserSetting(userId);
     }
+
 }

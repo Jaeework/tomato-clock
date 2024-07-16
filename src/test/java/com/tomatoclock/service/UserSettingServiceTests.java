@@ -18,18 +18,18 @@ public class UserSettingServiceTests {
     private UserSettingService service;
 
     @Test
-    public void testCreateUserSetting() {
+    public void testSaveUserSetting() {
 
         UserSettingVO userSetting = new UserSettingVO();
         userSetting.setUserId("user1");
-        userSetting.setDuration(25);
-        userSetting.setTxtColor("#ff69b4");
+        userSetting.setDuration(15);
+        userSetting.setTxtColor("#fffff6");
         userSetting.setShadowColor("#393e79");
         userSetting.setBgColor("#1f2241");
         userSetting.setBgImgUuid(null);
         userSetting.setBgImgName(null);
 
-        service.createUserSetting(userSetting);
+        service.saveUserSetting(userSetting);
 
         log.info("생성된 유저 세팅 번호  : " + userSetting.getId());
     }

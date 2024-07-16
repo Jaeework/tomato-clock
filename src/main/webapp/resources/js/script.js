@@ -1,4 +1,27 @@
+// document.addEventListener('DOMContentLoaded', function() {
 window.onload = function () {
+
+    // Fetch User Setting
+    fetch('/api/settings/get/user00')
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('duration').value = data.duration;
+            document.getElementById('backgroundColor').value = data.bgColor;
+            document.getElementById('shadowColor').value = data.shadowColor;
+            document.getElementById('textColor').value = data.txtColor;
+            document.getElementById('backgroundImage').value = data.bgImgName;
+
+            // 로드된 설정을 적용
+            document.documentElement.style.setProperty('--color-primary', data.bgColor);
+            document.documentElement.style.setProperty('--color-shadow', data.shadowColor);
+            document.documentElement.style.setProperty('--color-timer-font', data.txtColor);
+
+            remainingTime = data.duration * 60;
+            updateDisplay();
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
 
     // Setting 기능 구현
     // variables
@@ -6,7 +29,7 @@ window.onload = function () {
     const secondsDisplay = document.getElementById('seconds');
     const durationSelect = document.getElementById('duration');
     const applyDurationButton = document.getElementById('applyDuration');
-    
+
     // change background color
     document.getElementById('backgroundColor').addEventListener('input', function() {
         document.documentElement.style.setProperty('--color-primary', this.value);
@@ -23,6 +46,36 @@ window.onload = function () {
     });
 
 
+    // Save User Setting
+    document.getElementById('saveSettings').addEventListener('click', function() {
+        const settings = {
+            userId: 'user00', // 사용자 ID를 동적으로 설정해야 함
+            duration: parseInt(document.getElementById('duration').value),
+            txtColor: document.getElementById('textColor').value,
+            shadowColor: document.getElementById('shadowColor').value,
+            bgColor: document.getElementById('backgroundColor').value,
+            bgImgUuid: null,
+            bgImgName: null
+        };
+
+        fetch('/api/settings/save', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(settings)
+        })
+            .then(response => response.text())
+            .then(data => {
+                if(data === 'success') {
+                    alert('Your Setting has been successfully saved.');
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    });
+
     // 타이머 기능 구현
     // variables
     const startButton = document.getElementById('startButton');
@@ -30,7 +83,7 @@ window.onload = function () {
     const resetButton = document.getElementById('resetButton');
 
     let timer;
-    let duration = parseInt(durationSelect.value, 10);
+    let duration = parseInt(durationSelect.value);
     let remainingTime = duration * 60;
 
     function updateDisplay() {
@@ -47,6 +100,9 @@ window.onload = function () {
                 updateDisplay();
             } else {
                 clearInterval(timer);
+                // 타이머 완료 시 동작 추가
+                startButton.style.display = 'inline-block';
+                stopButton.style.display = 'none';
             }
         }, 1000);
     }
@@ -79,10 +135,11 @@ window.onload = function () {
     });
     // change duration
     applyDurationButton.addEventListener('click', function () {
-        duration = parseInt(durationSelect.value, 10);
+        duration = parseInt(durationSelect.value);
         resetTimer();
     });
 
     // 초기 타이머 설정
-    updateDisplay();
+    // updateDisplay();
 }
+// });

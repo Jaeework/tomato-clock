@@ -27,7 +27,7 @@
                                 <button type="button" class="btn btn-primary float-end mt-2" id="applyDuration">Apply</button>
                                 <select class="form-control" id="duration">
                                   <c:forEach var="i" begin="10" end="60" step="5">
-                                      <option value="${i}" ${i == 25 ? 'selected' : ''}>${i}</option>
+                                      <option value="${i}">${i}</option>
                                   </c:forEach>
                                 </select>
                             </div>
@@ -41,7 +41,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="textColor" class="form-label">Text Color:</label>
-                                <input type="color" class="form-control form-control-color" id="textColor" value="#ff69b4">
+                                <input type="color" class="form-control form-control-color" id="textColor" value="#fffff6">
                             </div>
                             <div class="form-group">
                                 <label for="backgroundImage" class="form-label">Background Image:</label>

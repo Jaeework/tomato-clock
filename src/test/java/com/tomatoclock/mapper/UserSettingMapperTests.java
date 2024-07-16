@@ -18,38 +18,18 @@ public class UserSettingMapperTests {
     private UserSettingMapper mapper;
 
     @Test
-    public void testInsert() {
+    public void testSaveUserSetting() {
 
         UserSettingVO setting = new UserSettingVO();
         setting.setUserId("user00");
-        setting.setDuration(25);
-        setting.setTxtColor("#ff69b4");
+        setting.setDuration(20);
+        setting.setTxtColor("#fffff6");
         setting.setShadowColor("#393e79");
         setting.setBgColor("#1f2241");
         setting.setBgImgUuid(null);
         setting.setBgImgName(null);
 
-        mapper.insertUserSetting(setting);
-
-        log.info(setting);
-    }
-
-    @Test
-    public void testInsertSelectKey() {
-
-        UserSettingVO setting = new UserSettingVO();
-        setting.setUserId("user00");
-        setting.setDuration(25);
-        setting.setTxtColor("#ff69b4");
-        setting.setShadowColor("#393e79");
-        setting.setBgColor("#1f2241");
-        setting.setBgImgUuid(null);
-        setting.setBgImgName(null);
-
-        mapper.insertUserSettingSelectKey(setting);
-
-        log.info(setting);
-
+        mapper.saveUserSetting(setting);
     }
 
     @Test

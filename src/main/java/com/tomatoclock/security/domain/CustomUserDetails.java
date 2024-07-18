@@ -1,52 +1,31 @@
 package com.tomatoclock.security.domain;
 
 import com.tomatoclock.domain.MemberVO;
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.stream.Collectors;
 
-public class CustomUserDetails implements UserDetails {
+@Getter
+public class CustomUserDetails extends User {
+
+    private static final long serialVersionUTD = 1L;
 
     private MemberVO member;
 
-    public CustomUserDetails(MemberVO member) {
-        this.member = member;
+    public CustomUserDetails(String username, String password, Collection<? extends GrantedAuthority> authorities) {
+        super(username, password, authorities);
     }
 
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null; // 권한 설정을 추가할 경우 변경
+    public CustomUserDetails(MemberVO vo) {
+
+        super(vo.getId(), vo.getPassword(), vo.getAuthList().stream()
+                .map(auth -> new SimpleGrantedAuthority(auth.getAuth())).collect(Collectors.toList()));
+
+        this.member = vo;
     }
-
-    @Override
-    public String getPassword() {
-        return member.getPassword();
-    }
-
-    @Override
-    public String getUsername() {
-        return member.getId();
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return false;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return false;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return false;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return member.getEnabled() == 1 ? true : false;
-    }
-
-
 }

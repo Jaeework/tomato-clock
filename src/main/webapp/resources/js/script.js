@@ -1,8 +1,10 @@
 // document.addEventListener('DOMContentLoaded', function() {
 window.onload = function () {
+    const csrfHeaderName = document.querySelector('meta[name="_csrf_header"]').content;
+    const csrfTokenValue = document.querySelector('meta[name="_csrf"]').content;
 
     // Fetch User Setting
-    fetch('/api/settings/get/user00')
+    fetch('/api/settings/get')
         .then(response => response.json())
         .then(data => {
             document.getElementById('duration').value = data.duration;
@@ -49,7 +51,7 @@ window.onload = function () {
     // Save User Setting
     document.getElementById('saveSettings').addEventListener('click', function() {
         const settings = {
-            userId: 'user00', // 사용자 ID를 동적으로 설정해야 함
+            //userId: "userId", // 사용자 ID를 동적으로 설정해야 함
             duration: parseInt(document.getElementById('duration').value),
             txtColor: document.getElementById('textColor').value,
             shadowColor: document.getElementById('shadowColor').value,
@@ -61,9 +63,12 @@ window.onload = function () {
         fetch('/api/settings/save', {
             method: 'POST',
             headers: {
+                'X-Requested-With': 'XMLHttpRequest',
                 'Content-Type': 'application/json',
+                [csrfHeaderName]: csrfTokenValue,
             },
-            body: JSON.stringify(settings)
+            body: JSON.stringify(settings),
+            credentials: "same-origin",
         })
             .then(response => response.text())
             .then(data => {
@@ -75,6 +80,14 @@ window.onload = function () {
                 console.error('Error:', error);
             });
     });
+
+
+    // 로그아웃 csrf 토큰 전송
+    $("#logoutButton").on("click", function (e) {
+        e.preventDefault();
+        $("#logoutForm").submit();
+    });
+
 
     // 타이머 기능 구현
     // variables

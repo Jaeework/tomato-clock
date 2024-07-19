@@ -1,9 +1,12 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"
          pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta id="_csrf" name="_csrf" content="${_csrf.token}"/>
+<meta id="_csrf_header" name="_csrf_header" content="${_csrf.headerName}"/>
 <head>
     <title>TomatoClock</title>
     <link rel="stylesheet" href="/resources/css/header.css">
@@ -61,7 +64,15 @@
                         <a class="dropdown-item" href="#">Profile</a>
                         <a class="dropdown-item" href="#">Statistics</a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">Logout</a>
+                        <sec:authorize access="isAuthenticated()">
+                            <form id="logoutForm" class="user" role="form" method="post" action="/logout">
+                                <a class="dropdown-item" href="/" id="logoutButton">Logout</a>
+                                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+                            </form>
+                        </sec:authorize>
+                        <sec:authorize access="isAnonymous()">
+                            <a class="dropdown-item" href="/login">Login</a>
+                        </sec:authorize>
                     </div>
                 </div>
             </div>

@@ -32,9 +32,11 @@ public class MemberMapperTests {
 
     @Test
     public void testSelectById() {
-        MemberVO member = mapper.selectById("user00");
+        MemberVO member = mapper.selectById("admin90");
 
         log.info(member);
+
+        member.getAuthList().forEach(authVO -> log.info(authVO));
     }
 
     @Test

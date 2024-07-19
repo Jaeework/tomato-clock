@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
+
+    <bean id="bcryptPasswordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
+    <bean id="customUserDetailsService" class="com.tomatoclock.security.CustomUserDetailsService"/>
+
+    <!-- Define mvcHandlerMappingIntrospector bean -->
+    <bean id="mvcHandlerMappingIntrospector" class="org.springframework.web.servlet.handler.HandlerMappingIntrospector"/>
+    <bean id="webexpressionHandler" class="org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler" />
+
+    <security:http auto-config="true" use-expressions="true">
+
+        <!-- 정적 자원에 대한 접근 허용 -->
+        <security:intercept-url pattern="/resources/css/**" access="permitAll" />
+        <security:intercept-url pattern="/resources/js/**" access="permitAll" />
+        <security:intercept-url pattern="/resources/img/**" access="permitAll" />
+
+        <!-- index 페이지에 대한 접근 허용 -->
+        <security:intercept-url pattern="/" access="permitAll" />
+
+        <!-- api 통신에 대한 접근 허용 -->
+        <security:intercept-url pattern="/api/**" access="permitAll" />
+
+        <security:intercept-url pattern="/login" access="isAnonymous()" />
+        <security:intercept-url pattern="/signup" access="isAnonymous()" />
+        <security:intercept-url pattern="/logout" access="isAuthenticated()" />
+
+        <security:form-login
+            login-page="/login"
+            default-target-url="/"
+            authentication-failure-url="/login?error"
+             />
+
+        <security:access-denied-handler error-page="/" />
+
+        <security:logout logout-success-url="/" invalidate-session="true" delete-cookies="remember-me, JSESSIONID" />
+
+        <security:remember-me token-validity-seconds="604800" />
+
+    </security:http>
+
+    <security:authentication-manager>
+        <security:authentication-provider user-service-ref="customUserDetailsService">
+            <security:password-encoder ref="bcryptPasswordEncoder" />
+        </security:authentication-provider>
+
+    </security:authentication-manager>
+
+</beans>

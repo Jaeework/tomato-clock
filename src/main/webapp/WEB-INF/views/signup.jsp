@@ -30,6 +30,12 @@
             <button class="btn btn-primary w-100 py-2" type="submit">Sign up</button>
             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
         </form>
+        <div class="mt-3">
+            <p class="mt-1 mb-0 p-0">
+                Already have an account?
+                <a href="/login">Go to Login</a>
+            </p>
+        </div>
     </div>
 
 </body>

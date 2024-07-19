@@ -33,6 +33,12 @@
             <button class="btn btn-primary w-100 py-2" id="loginButton" type="submit">Sign in</button>
             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
         </form>
+        <div class="mt-3">
+            <p class="mt-1 mb-0 p-0">
+                New to TomatoClock?
+                <a href="/signup">Create an account</a>
+            </p>
+        </div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>

@@ -15,13 +15,30 @@
         <security:csrf disabled="true" />
         <security:intercept-url pattern="/login" access="permitAll" />
         <security:intercept-url pattern="/signup" access="permitAll" />
+
+        <!-- 정적 자원에 대한 접근 허용 -->
+        <security:intercept-url pattern="/resources/css/**" access="permitAll" />
+        <security:intercept-url pattern="/resources/js/**" access="permitAll" />
+        <security:intercept-url pattern="/resources/img/**" access="permitAll" />
+
+        <!-- index 페이지에 대한 접근 허용 -->
+        <security:intercept-url pattern="/" access="permitAll" />
+
+        <!-- api 통신에 대한 접근 허용 -->
+        <security:intercept-url pattern="/api/**" access="permitAll" />
+
+        <security:intercept-url pattern="/login" access="isAnonymous()" />
+        <security:intercept-url pattern="/signup" access="isAnonymous()" />
+        <security:intercept-url pattern="/logout" access="isAuthenticated()" />
+
         <security:form-login
             login-page="/login"
             default-target-url="/"
             authentication-failure-url="/login?error"
-            username-parameter="username"
-            password-parameter="password" />
-        <security:logout logout-success-url="/login?logout" />
+             />
+
+        <security:access-denied-handler error-page="/" />
+        <security:logout logout-success-url="/" invalidate-session="true" delete-cookies="remember-me, JSESSIONID" />
     </security:http>
 
     <security:authentication-manager>

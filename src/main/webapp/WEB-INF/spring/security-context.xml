@@ -12,9 +12,6 @@
     <bean id="mvcHandlerMappingIntrospector" class="org.springframework.web.servlet.handler.HandlerMappingIntrospector"/>
 
     <security:http auto-config="true" use-expressions="true">
-        <security:csrf disabled="true" />
-        <security:intercept-url pattern="/login" access="permitAll" />
-        <security:intercept-url pattern="/signup" access="permitAll" />
 
         <!-- 정적 자원에 대한 접근 허용 -->
         <security:intercept-url pattern="/resources/css/**" access="permitAll" />

@@ -1,5 +1,7 @@
 // document.addEventListener('DOMContentLoaded', function() {
 window.onload = function () {
+    const csrfHeaderName = document.querySelector('meta[name="_csrf_header"]').content;
+    const csrfTokenValue = document.querySelector('meta[name="_csrf"]').content;
 
     // Fetch User Setting
     fetch('/api/settings/get')
@@ -61,9 +63,12 @@ window.onload = function () {
         fetch('/api/settings/save', {
             method: 'POST',
             headers: {
+                'X-Requested-With': 'XMLHttpRequest',
                 'Content-Type': 'application/json',
+                [csrfHeaderName]: csrfTokenValue,
             },
-            body: JSON.stringify(settings)
+            body: JSON.stringify(settings),
+            credentials: "same-origin",
         })
             .then(response => response.text())
             .then(data => {

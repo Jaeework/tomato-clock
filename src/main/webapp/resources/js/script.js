@@ -2,7 +2,7 @@
 window.onload = function () {
 
     // Fetch User Setting
-    fetch('/api/settings/get/user00')
+    fetch('/api/settings/get')
         .then(response => response.json())
         .then(data => {
             document.getElementById('duration').value = data.duration;
@@ -49,7 +49,7 @@ window.onload = function () {
     // Save User Setting
     document.getElementById('saveSettings').addEventListener('click', function() {
         const settings = {
-            userId: 'user00', // 사용자 ID를 동적으로 설정해야 함
+            //userId: "userId", // 사용자 ID를 동적으로 설정해야 함
             duration: parseInt(document.getElementById('duration').value),
             txtColor: document.getElementById('textColor').value,
             shadowColor: document.getElementById('shadowColor').value,

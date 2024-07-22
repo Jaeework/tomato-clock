@@ -16,14 +16,14 @@
 
     <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#"><h1>TomatoClock</h1></a>
+            <a class="navbar-brand" href="/"><h1>TomatoClock</h1></a>
             <div class="ml-auto">
                 <!-- Settings Dropdown -->
                 <div class="dropdown d-inline dropstart">
                     <span class="settings-icon" id="settingsDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <img src="/resources/img/setting-icon.png" alt="user setting icon">
                     </span>
-                    <div class="dropdown-menu settings-dropdown-menu" aria-labelledby="settingsDropdown">
+                    <div class="dropdown-menu settings-dropdown-menu border-0 shadow w-220px" aria-labelledby="settingsDropdown" data-bs-theme="dark">
                         <form id="settingsForm" class="px-4 py-3">
                             <div class="form-group">
                                 <label for="duration" class="form-label">Duration (minutes)</label>
@@ -60,8 +60,8 @@
                     <span class="user-icon" id="userDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <img src="/resources/img/profile-icon.png" alt="profile icon">
                     </span>
-                    <div class="dropdown-menu user-dropdown-menu" aria-labelledby="userDropdown">
-                        <a class="dropdown-item" href="#">Profile</a>
+                    <div class="dropdown-menu user-dropdown-menu border-0 shadow w-220px" aria-labelledby="userDropdown" data-bs-theme="dark">
+                        <a class="dropdown-item" href="/profile">Profile</a>
                         <a class="dropdown-item" href="#">Statistics</a>
                         <div class="dropdown-divider"></div>
                         <sec:authorize access="isAuthenticated()">

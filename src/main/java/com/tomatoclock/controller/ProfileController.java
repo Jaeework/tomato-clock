@@ -6,12 +6,12 @@ import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.security.Principal;
 
 @Controller
 @Log4j2
@@ -28,10 +28,9 @@ public class ProfileController {
 
     @PostMapping("api/profile/update/email")
     public ResponseEntity<String> updateEmail(@RequestParam("email") String email,
-                                                @RequestParam("currentPassword") String currentPassword) {
+                                              @RequestParam("currentPassword") String currentPassword, Principal principal) {
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String userid = authentication.getName();
+        String userid = principal.getName();
 
         MemberVO memberToUpdate = new MemberVO();
         memberToUpdate.setId(userid);
@@ -48,14 +47,13 @@ public class ProfileController {
     @PostMapping("api/profile/update/password")
     public ResponseEntity<String> updatePassword(@RequestParam("currentPassword") String currentPassword,
                                                 @RequestParam("newPassword") String newPassword,
-                                                @RequestParam("confirmPassword") String confirmPassword) {
+                                                @RequestParam("confirmPassword") String confirmPassword, Principal principal) {
 
         if (!newPassword.equals(confirmPassword)) {
             return ResponseEntity.badRequest().body("New password and confirmation password do not match.");
         }
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String userid = authentication.getName();
+        String userid = principal.getName();
 
         MemberVO memberToUpdate = new MemberVO();
         memberToUpdate.setId(userid);

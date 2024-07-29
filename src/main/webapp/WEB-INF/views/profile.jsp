@@ -33,8 +33,8 @@
                 <label for="email">Email</label>
             </div>
             <div class="mb-3">
-                <button type="button" class="btn btn-secondary mt-2" data-bs-toggle="modal" data-bs-target="#modal" onclick="showEmailChangeModal()">이메일 변경</button>
-                <button type="button" class="btn btn-secondary mt-2" data-bs-toggle="modal" data-bs-target="#modal" onclick="showPasswordChangeModal()">비밀번호 변경</button>
+                <button type="button" id="showEmailChangeModalBtn" class="btn btn-secondary mt-2" data-bs-toggle="modal" data-bs-target="#modal" >이메일 변경</button>
+                <button type="button" id="showPasswordChangeModalBtn" class="btn btn-secondary mt-2" data-bs-toggle="modal" data-bs-target="#modal" >비밀번호 변경</button>
             </div>
 
         </form>
@@ -86,7 +86,6 @@
 
     <!-- script -->
     <script src="/resources/js/profile.js"></script>
-    <script src="/resources/js/script.js"></script>
 
 </body>
 </html>

@@ -10,50 +10,56 @@
 <head>
     <title>TomatoClock</title>
     <link rel="stylesheet" href="/resources/css/header.css">
+    <%
+        boolean showSettings = Boolean.valueOf(request.getParameter("showSettings"));
+    %>
 </head>
 
 <body>
+    <c:set var="showSettings" value="<%=showSettings%>" />
 
     <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container-fluid">
             <a class="navbar-brand" href="/"><h1>TomatoClock</h1></a>
             <div class="ml-auto">
                 <!-- Settings Dropdown -->
-                <div class="dropdown d-inline dropstart">
-                    <span class="settings-icon" id="settingsDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <img src="/resources/img/setting-icon.png" alt="user setting icon">
-                    </span>
-                    <div class="dropdown-menu settings-dropdown-menu border-0 shadow w-220px" aria-labelledby="settingsDropdown" data-bs-theme="dark">
-                        <form id="settingsForm" class="px-4 py-3">
-                            <div class="form-group">
-                                <label for="duration" class="form-label">Duration (minutes)</label>
-                                <button type="button" class="btn btn-primary float-end mt-2" id="applyDuration">Apply</button>
-                                <select class="form-control" id="duration">
-                                  <c:forEach var="i" begin="10" end="60" step="5">
-                                      <option value="${i}">${i}</option>
-                                  </c:forEach>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="backgroundColor" class="form-label">Background Color:</label>
-                                <input type="color" class="form-control form-control-color" id="backgroundColor" value="#1f2241">
-                            </div>
-                            <div class="form-group">
-                                <label for="shadowColor" class="form-label">Shadow Color:</label>
-                                <input type="color" class="form-control form-control-color" id="shadowColor" value="#393e79">
-                            </div>
-                            <div class="form-group">
-                                <label for="textColor" class="form-label">Text Color:</label>
-                                <input type="color" class="form-control form-control-color" id="textColor" value="#fffff6">
-                            </div>
-                            <div class="form-group">
-                                <label for="backgroundImage" class="form-label">Background Image:</label>
-                                <input type="file" class="form-control form-control-file" id="backgroundImage">
-                            </div>
-                            <button type="button" class="btn btn-primary float-end" id="saveSettings">Save</button>
-                        </form>
+                <c:if test="${not empty showSettings and showSettings == true}">
+                    <div class="dropdown d-inline dropstart">
+                        <span class="settings-icon" id="settingsDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <img src="/resources/img/setting-icon.png" alt="user setting icon">
+                        </span>
+                        <div class="dropdown-menu settings-dropdown-menu border-0 shadow w-220px" aria-labelledby="settingsDropdown" data-bs-theme="dark">
+                            <form id="settingsForm" class="px-4 py-3">
+                                <div class="form-group">
+                                    <label for="duration" class="form-label">Duration (minutes)</label>
+                                    <button type="button" class="btn btn-primary float-end mt-2" id="applyDuration">Apply</button>
+                                    <select class="form-control" id="duration">
+                                      <c:forEach var="i" begin="10" end="60" step="5">
+                                          <option value="${i}">${i}</option>
+                                      </c:forEach>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="backgroundColor" class="form-label">Background Color:</label>
+                                    <input type="color" class="form-control form-control-color" id="backgroundColor" value="#1f2241">
+                                </div>
+                                <div class="form-group">
+                                    <label for="shadowColor" class="form-label">Shadow Color:</label>
+                                    <input type="color" class="form-control form-control-color" id="shadowColor" value="#393e79">
+                                </div>
+                                <div class="form-group">
+                                    <label for="textColor" class="form-label">Text Color:</label>
+                                    <input type="color" class="form-control form-control-color" id="textColor" value="#fffff6">
+                                </div>
+                                <div class="form-group">
+                                    <label for="backgroundImage" class="form-label">Background Image:</label>
+                                    <input type="file" class="form-control form-control-file" id="backgroundImage">
+                                </div>
+                                <button type="button" class="btn btn-primary float-end" id="saveSettings">Save</button>
+                            </form>
+                        </div>
                     </div>
-                </div>
+                </c:if>
 
                 <!-- User Dropdown -->
                 <div class="dropstart dropdown d-inline dropstart">

@@ -4,14 +4,14 @@ import com.tomatoclock.domain.MemberVO;
 import com.tomatoclock.service.MemberService;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.Map;
 
 @Controller
 @Log4j2
@@ -26,9 +26,10 @@ public class ProfileController {
 
     }
 
-    @PostMapping("api/profile/update/email")
-    public ResponseEntity<String> updateEmail(@RequestParam("email") String email,
-                                              @RequestParam("currentPassword") String currentPassword, Principal principal) {
+    @PostMapping(value = "api/profile/update/email", consumes = "application/json")
+    public ResponseEntity<String> updateEmail(@RequestBody Map<String, String> params, Principal principal) {
+        String email = params.get("email");
+        String currentPassword = params.get("currentPassword");
 
         String userid = principal.getName();
 
@@ -45,9 +46,11 @@ public class ProfileController {
     }
 
     @PostMapping("api/profile/update/password")
-    public ResponseEntity<String> updatePassword(@RequestParam("currentPassword") String currentPassword,
-                                                @RequestParam("newPassword") String newPassword,
-                                                @RequestParam("confirmPassword") String confirmPassword, Principal principal) {
+    public ResponseEntity<String> updatePassword(@RequestBody Map<String, String> params, Principal principal) {
+        String currentPassword = params.get("currentPassword");
+        String newPassword = params.get("newPassword");
+        String confirmPassword = params.get("confirmPassword");
+
 
         if (!newPassword.equals(confirmPassword)) {
             return ResponseEntity.badRequest().body("New password and confirmation password do not match.");

@@ -31,6 +31,11 @@ public class CustomUserDetailsService implements UserDetailsService {
             throw new UsernameNotFoundException("User not found");
         }
 
+        // enabled 값이 '0'이면 계정이 비활성화되었음을 표시
+        if (!vo.isEnabled()) {
+            throw new UsernameNotFoundException("Account is disabled");
+        }
+
         return new CustomUserDetails(vo);
     }
 

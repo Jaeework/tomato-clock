@@ -12,4 +12,5 @@ public interface MemberMapper {
 
     int updateUserProfile(MemberVO vo);
 
+    void deactivateUser(String userid);
 }

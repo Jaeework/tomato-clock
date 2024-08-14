@@ -75,4 +75,17 @@ public class ProfileController {
 
     }
 
+    @PostMapping("api/profile/delete")
+    public ResponseEntity<String> deleteAccount(@RequestBody Map<String, String> params, Principal principal) {
+        String password = params.get("password");
+        String userId = principal.getName();
+
+        try {
+            memberService.deactivateUser(userId, password);
+            return ResponseEntity.ok("Account deleted successfully.");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
 }

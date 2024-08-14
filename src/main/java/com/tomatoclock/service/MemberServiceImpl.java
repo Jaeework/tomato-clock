@@ -67,4 +67,15 @@ public class MemberServiceImpl implements MemberService {
         }
 
     }
+
+    @Override
+    public void deactivateUser(String userid, String password) throws IllegalArgumentException {
+        MemberVO currentUser = memberMapper.selectById(userid);
+
+        if (currentUser != null && passwordEncoder.matches(password, currentUser.getPassword())) {
+            memberMapper.deactivateUser(userid);
+        } else {
+            throw new IllegalArgumentException("Password is incorrect.");
+        }
+    }
 }

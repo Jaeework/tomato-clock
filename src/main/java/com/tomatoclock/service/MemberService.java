@@ -9,4 +9,6 @@ public interface MemberService {
     public MemberVO getUserById(String id);
 
     void updateUserProfile(MemberVO member, String currentPassword);
+
+    void deactivateUser(String userid, String password);
 }

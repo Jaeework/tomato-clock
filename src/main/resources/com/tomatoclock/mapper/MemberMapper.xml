@@ -8,6 +8,7 @@
         <result property="id" column="id" />
         <result property="password" column="password" />
         <result property="email" column="email" />
+        <result property="enabled" column="enabled" javaType="boolean" typeHandler="org.apache.ibatis.type.BooleanTypeHandler" />
         <result property="regdate" column="regdate" />
         <result property="updatedate" column="updatedate" />
         <collection property="authList" resultMap="authMap"></collection>
@@ -34,5 +35,18 @@
     <select id="selectByEmail" parameterType="string" resultType="com.tomatoclock.domain.MemberVO">
         SELECT * FROM tbl_member WHERE email = #{email}
     </select>
+
+    <update id="updateUserProfile">
+        UPDATE tbl_member
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="email != null"> email = #{email} </if>
+            <if test="password != null"> password = #{password} </if>
+        </trim>
+        WHERE id = #{id}
+    </update>
+
+    <update id="deactivateUser" parameterType="string">
+        UPDATE tbl_member SET enabled = '0' WHERE id = #{userid}
+    </update>
 
 </mapper>

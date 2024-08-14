@@ -10,4 +10,7 @@ public interface MemberMapper {
 
     MemberVO selectByEmail(String email);
 
+    int updateUserProfile(MemberVO vo);
+
+    void deactivateUser(String userid);
 }

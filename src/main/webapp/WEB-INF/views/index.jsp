@@ -17,7 +17,9 @@
 <body>
 
     <!-- Include header.jsp -->
-    <jsp:include page="includes/header.jsp" />
+    <jsp:include page="includes/header.jsp" >
+        <jsp:param name="showSettings" value="true" />
+    </jsp:include>
 
     <section>
         <div class="container">

@@ -36,7 +36,9 @@
                 <button type="button" id="showEmailChangeModalBtn" class="btn btn-secondary mt-2" data-bs-toggle="modal" data-bs-target="#modal" >이메일 변경</button>
                 <button type="button" id="showPasswordChangeModalBtn" class="btn btn-secondary mt-2" data-bs-toggle="modal" data-bs-target="#modal" >비밀번호 변경</button>
             </div>
-
+            <div class="mb-3">
+                <a class="mt-3" id="showDeleteAccountModalBtn" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#deleteAccountModal">회원탈퇴</a>
+            </div>
         </form>
     </div>
 
@@ -74,6 +76,28 @@
                         </div>
                         <button type="button" class="btn btn-primary" id="saveChangesButton">Save changes</button>
                     </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Account Modal -->
+    <div class="modal fade" id="deleteAccountModal" tabindex="-1" aria-labelledby="deleteAccountModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteAccountModalLabel">회원 탈퇴</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>회원 탈퇴를 하시려면, 비밀번호를 입력하세요.<br/>
+                        <span class="text-danger">현재 사용 중인 ID와 Email로 재가입이 불가합니다.</span></p>
+                    <div class="form-floating mb-3">
+                        <input type="password" class="form-control" id="deletePassword" placeholder="Password">
+                        <label for="deletePassword">Password</label>
+                    </div>
+                    <button type="button" class="btn btn-danger" id="deleteAccountButton">확인</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
                 </div>
             </div>
         </div>

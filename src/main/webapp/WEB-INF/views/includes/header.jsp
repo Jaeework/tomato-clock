@@ -68,7 +68,7 @@
                     </span>
                     <div class="dropdown-menu user-dropdown-menu border-0 shadow w-220px" aria-labelledby="userDropdown" data-bs-theme="dark">
                         <a class="dropdown-item" href="/profile">Profile</a>
-                        <a class="dropdown-item" href="#">Statistics</a>
+                        <a class="dropdown-item" href="/statistics">Statistics</a>
                         <div class="dropdown-divider"></div>
                         <sec:authorize access="isAuthenticated()">
                             <form id="logoutForm" class="user" role="form" method="post" action="/logout">

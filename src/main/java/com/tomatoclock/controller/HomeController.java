@@ -14,4 +14,15 @@ public class HomeController {
         return "index";
     }
 
+    @GetMapping("/profile")
+    @PreAuthorize("isAuthenticated()")
+    public void profile() {
+
+    }
+
+    @GetMapping("/statistics")
+    public void statistics() {
+
+    }
+
 }

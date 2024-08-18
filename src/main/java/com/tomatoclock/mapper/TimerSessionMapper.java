@@ -10,4 +10,7 @@ public interface TimerSessionMapper {
     void insertTimerSession(TimerSessionVO timerSession);
     List<TimerSessionVO> selectThisMonthTimerSessionList(String userid);
 
+    List<TimerSessionVO> selectSessionListByMonth(@Param("userid") String userid, @Param("month") int month, @Param("year") int year);
+
+    List<TimerSessionVO> selectSessionByDate(@Param("userid") String userid, @Param("date") String date);
 }

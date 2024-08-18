@@ -22,4 +22,21 @@
         ]]>
     </select>
 
+    <select id="selectSessionListByMonth" resultType="com.tomatoclock.domain.TimerSessionVO">
+        SELECT id, userid, starttime, endtime, duration
+        FROM tbl_session
+        WHERE userid = #{userid}
+            AND MONTH(starttime) = #{month}
+          AND YEAR(starttime) = #{year}
+        ORDER BY starttime ASC
+    </select>
+
+    <select id="selectSessionByDate" resultType="com.tomatoclock.domain.TimerSessionVO">
+        SELECT id, userid, starttime, endtime, duration
+        FROM tbl_session
+        WHERE userid = #{userid}
+          AND DATE(starttime) = #{date}
+        ORDER BY starttime ASC
+    </select>
+
 </mapper>

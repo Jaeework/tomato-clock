@@ -4,8 +4,9 @@
 <html>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <head>
-    <title>Statistics</title>
+    <title>TomatoClock</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.css">
     <link rel="stylesheet" href="/resources/css/statistics.css">
 </head>
 <body>
@@ -13,34 +14,28 @@
     <!-- Include header.jsp -->
     <jsp:include page="includes/header.jsp" />
 
-    <div class="container">
-        <div class="header">
-            <h2>Pomodoro 통계</h2>
-        </div>
+<div class="container mt-4">
+    <h2 class="mb-4">Pomodoro Statistics</h2>
 
-        <div class="calendar">
-            <div class="month-nav">
-                <button id="prev-month">&lt;</button>
-                <h3 id="current-month-year"></h3>
-                <button id="next-month">&gt;</button>
-            </div>
-            <div class="weekdays">
-                <div>일</div>
-                <div>월</div>
-                <div>화</div>
-                <div>수</div>
-                <div>목</div>
-                <div>금</div>
-                <div>토</div>
-            </div>
-            <div id="calendar-days" class="days"></div>
+    <div class="row">
+        <div class="col-md-8">
+            <div id="calendar"></div>
         </div>
-
-        <div id="stats" class="stats"></div>
+        <div class="col-md-4">
+            <div id="stats" class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Daily Statistics</h5>
+                    <div id="dayStats"></div>
+                </div>
+            </div>
+        </div>
     </div>
+</div>
 
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script src="/resources/js/statistics.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js"></script>
+<script src="/resources/js/statistics.js"></script>
 
 </body>
 </html>

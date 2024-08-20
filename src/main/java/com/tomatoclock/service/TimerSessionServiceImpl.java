@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -64,4 +65,25 @@ public class TimerSessionServiceImpl implements TimerSessionService {
 
         return stats;
     }
+
+    @Override
+    public Map<String, Object> getStatistics(String userId, int year, int month) {
+        List<TimerSessionVO> sessions = mapper.selectSessionListByMonth(userId, month, year);
+        Map<String, Object> statistics = new HashMap<>();
+
+        Map<String, Integer> dailyTotals = new HashMap<>();
+
+        if (!sessions.isEmpty()) {
+            for (TimerSessionVO session : sessions) {
+                String dateKey = new SimpleDateFormat("yyyy-MM-dd").format(session.getStarttime());
+                dailyTotals.put(dateKey, dailyTotals.getOrDefault(dateKey, 0) + session.getDuration());
+            }
+        }
+
+        statistics.put("dailyTotals", dailyTotals);  // 일별 총 시간 데이터
+        statistics.put("sessions", sessions);        // 전체 세션 데이터
+
+        return statistics;
+    }
+
 }

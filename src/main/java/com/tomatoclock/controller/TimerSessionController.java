@@ -23,6 +23,16 @@ public class TimerSessionController {
     @Setter(onMethod_ = @Autowired)
     private TimerSessionService sessionService;
 
+    @GetMapping("/getStatistics/{year}/{month}")
+    public ResponseEntity<Map<String, Object>> getStatistics(@PathVariable("year") int year, @PathVariable("month") int month, Principal principal) {
+        String userId = principal.getName();
+        log.warn("getStatistics controller: userid=" + userId + ", year=" + year + ", month=" + month);
+
+        Map<String, Object> statistics = sessionService.getStatistics(userId, year, month);
+
+        return ResponseEntity.ok(statistics);
+    }
+
 
     @GetMapping("/getByMonth/{year}/{month}")
     public ResponseEntity<List<TimerSessionVO>> getSessionsByMonth(@PathVariable("year") int year, @PathVariable("month") int month, Principal principal) {

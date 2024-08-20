@@ -1,120 +1,83 @@
-let currentDate = new Date();
+document.addEventListener('DOMContentLoaded', function() {
+    const calendarEl = document.getElementById('calendar');
+    const calendar = new FullCalendar.Calendar(calendarEl, {
+        timeZone: 'local',
+        initialView: 'dayGridMonth',
+        showNonCurrentDates: false,
+        fixedWeekCount: false,
+        headerToolbar: {
+            left: '',
+            center: 'title',
+            right: 'prev,next today'
+        },
+        events: function(fetchInfo, successCallback, failureCallback) {
+            const year = fetchInfo.start.getFullYear();
+            const month = fetchInfo.start.getMonth() + 1; // FullCalendar uses 0-indexed months
 
-function renderCalendar(year, month) {
-    const firstDay = new Date(year, month, 1);
-    const lastDay = new Date(year, month + 1, 0);
-    const daysInMonth = lastDay.getDate();
-    const startingDay = firstDay.getDay();
+            $.getJSON('/api/statistics/getStatistics/' + year + "/" + month, function(data) {
+                const dailyTotals = data.dailyTotals;
+                const sessions = data.sessions;
 
-    let calendarHtml = '';
-    let dayCount = 1;
+                const events = Object.keys(dailyTotals).map(date => {
+                    const duration = dailyTotals[date];
 
-    for (let i = 0; i < 42; i++) {
-        if (i < startingDay || dayCount > daysInMonth) {
-            calendarHtml += '<div class="day"></div>';
-        } else {
-            calendarHtml += `<div class="day" data-date="${year}-${(month + 1).toString().padStart(2, '0')}-${dayCount.toString().padStart(2, '0')}">${dayCount}</div>`;
-            dayCount++;
+                    return {
+                        title: `${Math.floor(duration / 3600).toString().padStart(2, '0')}:${Math.floor((duration % 3600) / 60).toString().padStart(2, '0')}`,
+                        start: date,
+                        allDay: true,
+                        display: 'background',
+                        backgroundColor: getColorForDuration(duration),
+                        borderColor: getColorForDuration(duration),
+                        textColor: '#000000',
+                        extendedProps: {
+                            duration: duration,
+                            sessions: sessions.filter(session => {
+                                // starttime을 ISO 문자열로 변환하고 날짜 부분만 비교
+                                const startDateStr = new Date(session.starttime).toISOString().split('T')[0];
+                                return startDateStr === date;
+                            })
+                        }
+                    };
+                });
+                successCallback(events);
+
+            }).fail(function(xhr, status, error) {
+                console.error("Error fetching month data:", error);
+                failureCallback(error);
+            });
+        },
+        eventClick: function(info) {
+            const date = info.event.startStr;
+            const selectedSessions = info.event.extendedProps.sessions;
+            displayDayStats(date, info.event.extendedProps.duration, selectedSessions);
         }
+    });
+
+    calendar.render();
+
+    function getColorForDuration(duration) {
+        if (duration >= 43200) return '#ff4500';    // over 12 hours
+        if (duration >= 36000) return '#FF9800';    // over 10 hours
+        if (duration >= 25200) return '#f8bc5e';    // over 7 hours
+        if (duration >= 14400) return '#e0c080';    // over 4 hours
+        if (duration >= 1) return '#f1d7b6';        // over 1 second
+        return '#F9F9F9';   // Default
     }
 
-    document.getElementById('calendar-days').innerHTML = calendarHtml;
-    document.getElementById('current-month-year').textContent = `${year}년 ${month + 1}월`;
+    function displayDayStats(date, totalDuration, sessions) {
+        const startTime = sessions.length > 0 ? new Date(sessions[0].starttime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }) : '';
+        const endTime = sessions.length > 0 ? new Date(sessions[sessions.length - 1].endtime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }) : '';
+        const hours = Math.floor(totalDuration / 3600);
+        const minutes = Math.floor((totalDuration % 3600) / 60);
+        const seconds = totalDuration % 60;
 
-    fetchMonthData(year, month + 1);
-}
+        let statsHtml = `
+            <h5>${date}</h5>
+            <p>총 집중 시간: ${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}</p>
+            <p>시작시간: ${startTime}</p>
+            <p>종료시간: ${endTime}</p>
+        `;
 
-function fetchMonthData(year, month) {
-    $.getJSON('/api/statistics/getByMonth/' + year + "/" + month,
-        function(data) {
-            updateCalendarHighlights(data)
-        }).fail(function(xhr, status, error) {
-        console.error("Error fetching month data:", error);
-    });
-}
-
-function updateCalendarHighlights(sessions) {
-    const dailyTotals = {};
-    sessions.forEach(session => {
-        const date = new Date(session.starttime).toISOString().split('T')[0];
-        dailyTotals[date] = (dailyTotals[date] || 0) + session.duration;
-    });
-
-    Object.keys(dailyTotals).forEach(function(date) {
-        const duration = dailyTotals[date];
-        console.log("duration ", date, " : ", dailyTotals);
-        const dayElement = document.querySelector(`.day[data-date="${date}"]`);
-
-        if (dayElement) {
-            if (duration >= 43200) {          // over 12 hours
-                dayElement.classList.add('highlight-5');
-            } else if (duration >= 36000) {   // over 10 hours
-                dayElement.classList.add('highlight-4');
-            } else if (duration >= 25200) {   // over 7 hours
-                dayElement.classList.add('highlight-3');
-            } else if (duration >= 14400) { // over 4 hours
-                dayElement.classList.add('highlight-2');
-            } else {
-                dayElement.classList.add('highlight-1');
-            }
-            const durationText = `${Math.floor(duration / 3600).toString().padStart(2, '0')}:${Math.floor((duration % 3600) / 60).toString().padStart(2, '0')}`;
-            dayElement.innerHTML += `<br>${durationText}`;
-        }
-    });
-
-}
-
-function fetchDayStats(date) {
-    $.getJSON("/api/statistics/getByDate/" + date,
-        function(stats) {
-            displayDayStats(stats, date);
-        }).fail(function(xhr, status, error) {
-        console.error("Error fetching day stats:", error);
-    });
-}
-
-function displayDayStats(stats, date) {
-    const totalDuration = stats.totalDuration;
-    const startTime = stats.startTime ? new Date(stats.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }) : '';
-    const endTime = stats.endTime ? new Date(stats.endTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }) : '';
-    const hours = Math.floor(totalDuration / 3600);
-    const minutes = Math.floor((totalDuration % 3600) / 60);
-    const seconds = totalDuration % 60;
-
-    let statsHtml = `
-        <h4>${date}</h4>
-        <p>총 집중 시간: ${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}</p>
-        <p>시작시간: ${startTime}</p>
-        <p>종료시간: ${endTime}</p>
-    `;
-
-    document.getElementById('stats').innerHTML = statsHtml;
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('calendar-days').addEventListener('click', function(e) {
-        if (e.target.classList.contains('day') && e.target.dataset.date) {
-            document.querySelectorAll('.day').forEach(day => day.classList.remove('active'));
-            e.target.classList.add('active');
-            fetchDayStats(e.target.dataset.date);
-        }
-    });
-
-    document.getElementById('prev-month').addEventListener('click', function() {
-        currentDate.setMonth(currentDate.getMonth() - 1);
-        renderCalendar(currentDate.getFullYear(), currentDate.getMonth());
-    });
-
-    document.getElementById('next-month').addEventListener('click', function() {
-        currentDate.setMonth(currentDate.getMonth() + 1);
-        renderCalendar(currentDate.getFullYear(), currentDate.getMonth());
-    });
-
-    // Initial render
-    renderCalendar(currentDate.getFullYear(), currentDate.getMonth());
-
-    // Set default selected date to today
-    const today = new Date().toISOString().split('T')[0];
-    document.querySelector(`.day[data-date="${today}"]`).classList.add('active');
-    fetchDayStats(today);
+        document.getElementById('dayStats').innerHTML = statsHtml;
+    }
 });

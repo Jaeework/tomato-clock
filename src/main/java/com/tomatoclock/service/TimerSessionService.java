@@ -14,4 +14,6 @@ public interface TimerSessionService {
     public List<TimerSessionVO> getSessionListByMonth(String userid, int month, int year);
 
     public Map<String,Object> getSessionStatsByDate(String userid, String date);
+
+    Map<String, Object> getStatistics(String userId, int year, int month);
 }

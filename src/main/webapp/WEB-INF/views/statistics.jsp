@@ -14,23 +14,30 @@
     <!-- Include header.jsp -->
     <jsp:include page="includes/header.jsp" />
 
-<div class="container mt-4">
-    <h2 class="mb-4">Pomodoro Statistics</h2>
-
-    <div class="row">
-        <div class="col-md-8">
-            <div id="calendar"></div>
-        </div>
-        <div class="col-md-4">
-            <div id="stats" class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Daily Statistics</h5>
-                    <div id="dayStats"></div>
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-lg-8">
+                <h2>Pomodoro 통계</h2>
+                <div id="calendar" class="border rounded shadow-sm p-3 bg-white"></div>
+                <div class="calender-footer">
+                    <div class="color-legend col-lg-4">
+                        <div class="color-box color-box-1">0+</div>
+                        <div class="color-box color-box-2">4+</div>
+                        <div class="color-box color-box-3">7+</div>
+                        <div class="color-box color-box-4">10+</div>
+                        <div class="color-box color-box-5">12+</div>
+                    </div>
+                    <div id="monthlyTotal" class="mt-auto"></div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <h4 class="mt-4 mt-lg-0">일일 통계</h4>
+                <div id="dayStats" class="border rounded shadow-sm p-3 bg-white text-center">
+                    <h5 class="text-muted">Select a date to view statistics</h5>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

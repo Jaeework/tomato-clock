@@ -1,5 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     const calendarEl = document.getElementById('calendar');
+    let monthlyTotal = 0;
+
     const calendar = new FullCalendar.Calendar(calendarEl, {
         timeZone: 'local',
         initialView: 'dayGridMonth',
@@ -18,8 +20,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 const dailyTotals = data.dailyTotals;
                 const sessions = data.sessions;
 
+                monthlyTotal = 0;
+
                 const events = Object.keys(dailyTotals).map(date => {
                     const duration = dailyTotals[date];
+                    monthlyTotal += duration;
 
                     return {
                         title: `${Math.floor(duration / 3600).toString().padStart(2, '0')}:${Math.floor((duration % 3600) / 60).toString().padStart(2, '0')}`,
@@ -40,7 +45,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     };
                 });
                 successCallback(events);
-
+                updateMonthlyTotal();
             }).fail(function(xhr, status, error) {
                 console.error("Error fetching month data:", error);
                 failureCallback(error);
@@ -54,6 +59,17 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     calendar.render();
+
+    function updateMonthlyTotal() {
+        const hours = Math.floor(monthlyTotal / 3600);
+        const minutes = Math.floor((monthlyTotal % 3600) / 60);
+        const totalHTML = `
+            <div>
+                <strong>월간 총 집중시간:</strong> ${hours}H ${minutes}M
+            </div>
+        `;
+        document.getElementById('monthlyTotal').innerHTML = totalHTML;
+    }
 
     function getColorForDuration(duration) {
         if (duration >= 43200) return '#ff4500';    // over 12 hours
@@ -72,10 +88,10 @@ document.addEventListener('DOMContentLoaded', function() {
         const seconds = totalDuration % 60;
 
         let statsHtml = `
-            <h5>${date}</h5>
-            <p>총 집중 시간: ${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}</p>
-            <p>시작시간: ${startTime}</p>
-            <p>종료시간: ${endTime}</p>
+            <h5 class="stat-date mt-4 mb-4">${date}</h5>
+            <p class="stat-item mb-4"><strong>총 집중 시간</strong><br/> ${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}</p>
+            <p class="stat-item mb-4"><strong>시작시간</strong><br/> ${startTime}</p>
+            <p class="stat-item mb-4"><strong>종료시간</strong><br/> ${endTime}</p>
         `;
 
         document.getElementById('dayStats').innerHTML = statsHtml;

@@ -11,6 +11,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -49,6 +51,22 @@ public class TimerSessionController {
 
         Map<String, Object> stats = sessionService.getSessionStatsByDate(userId,date);
         return ResponseEntity.ok(stats);
+    }
+
+    @PostMapping("/createTimerSession")
+    public ResponseEntity<String> startTimerSession(Principal principal) {
+        String userId = principal.getName();
+        Long sessionId = sessionService.createTimerSession(userId);
+        return ResponseEntity.ok(String.valueOf(sessionId));
+    }
+
+    @PostMapping("/updateTimerSession")
+    public ResponseEntity<String> updateTimerSession(@RequestBody Map<String, String> params) {
+        Long sessionId = Long.parseLong(params.get("sessionId"));
+        int usedTime = Integer.parseInt(params.get("usedTime"));
+
+        sessionService.updateTimerSession(sessionId, usedTime);
+        return ResponseEntity.ok("Session updated successfully.");
     }
 
 }

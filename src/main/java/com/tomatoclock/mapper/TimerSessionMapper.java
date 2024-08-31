@@ -8,6 +8,11 @@ import java.util.List;
 public interface TimerSessionMapper {
 
     void insertTimerSession(TimerSessionVO timerSession);
+
+    void updateTimerSession(TimerSessionVO timerSession);
+
+    TimerSessionVO getTimerSessionById(Long sessionId);
+
     List<TimerSessionVO> selectThisMonthTimerSessionList(String userid);
 
     List<TimerSessionVO> selectSessionListByMonth(@Param("userid") String userid, @Param("month") int month, @Param("year") int year);

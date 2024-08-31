@@ -86,4 +86,37 @@ public class TimerSessionServiceImpl implements TimerSessionService {
         return statistics;
     }
 
+    @Override
+    public TimerSessionVO getTimerSessionById(Long sessionId) {
+        return mapper.getTimerSessionById(sessionId);
+    }
+
+    public Long createTimerSession(String userId) {
+        TimerSessionVO session = new TimerSessionVO();
+        session.setUserid(userId);
+        session.setStarttime(new Date());
+        session.setDuration(0);  // Set the initial planned duration
+
+        mapper.insertTimerSession(session);
+
+        log.info("Created new TimerSession: {}", session);
+        return session.getId();
+    }
+
+    public void updateTimerSession(Long sessionId, int usedTime) {
+        TimerSessionVO session = mapper.getTimerSessionById(sessionId);
+        if (session != null) {
+            Date currentTime = new Date();
+
+            session.setEndtime(currentTime);
+            session.setDuration(usedTime);
+
+            mapper.updateTimerSession(session);
+
+            log.info("Updated TimerSession: {}", session);
+        } else {
+            log.warn("Session ID not found: {}", sessionId);
+        }
+    }
+
 }

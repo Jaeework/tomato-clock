@@ -16,4 +16,11 @@ public interface TimerSessionService {
     public Map<String,Object> getSessionStatsByDate(String userid, String date);
 
     Map<String, Object> getStatistics(String userId, int year, int month);
+
+    Long createTimerSession(String userId);
+
+    void updateTimerSession(Long sessionId, int usedTime);
+
+    TimerSessionVO getTimerSessionById(Long sessionId);
+
 }

@@ -18,8 +18,8 @@ window.onload = function () {
             document.documentElement.style.setProperty('--color-shadow', data.shadowColor);
             document.documentElement.style.setProperty('--color-timer-font', data.txtColor);
 
-            duration = data.duration;
-            remainingTime = duration * 60;
+            currentDuration = data.duration;
+            remainingTime = currentDuration * 60;
             updateDisplay();
         })
         .catch((error) => {
@@ -98,7 +98,8 @@ window.onload = function () {
 
     let timer;
     let isTimerRunning = false; // 타이머가 동작 중인지 체크
-    let duration;
+    let currentDuration;
+    let originalSessionDuration;
     let remainingTime;
     let currentTimerSessionId = document.getElementById('currentTimerSessionId').value;
 
@@ -112,6 +113,7 @@ window.onload = function () {
     function startTimer() {
         if (!currentTimerSessionId) {
             createNewTimerSession(); // Create a new session if no current session exists
+            originalSessionDuration = currentDuration;
         }
 
         if(!isTimerRunning) {
@@ -133,7 +135,7 @@ window.onload = function () {
             clearInterval(timer);
             isTimerRunning = false;
             if (currentTimerSessionId) {
-                const usedTime = duration * 60 - remainingTime;
+                const usedTime = Math.max(0, originalSessionDuration * 60 - remainingTime);
                 updateTimerSession(usedTime);
             }
         }
@@ -143,7 +145,8 @@ window.onload = function () {
         if(currentTimerSessionId && isTimerRunning) {
             stopTimer();
         }
-        remainingTime = duration * 60;
+        remainingTime = currentDuration * 60;
+        originalSessionDuration = null;
         updateDisplay();
         currentTimerSessionId = null; // Reset current session ID
         document.getElementById('currentTimerSessionId').value = '';
@@ -178,7 +181,7 @@ window.onload = function () {
                 'Content-Type': 'application/json',
                 [csrfHeaderName]: csrfTokenValue,
             },
-            body: JSON.stringify({ sessionId: currentTimerSessionId, usedTime: usedTime }),
+            body: JSON.stringify({ sessionId: currentTimerSessionId, usedTime: Math.max(0, usedTime) }),
             credentials: "same-origin",
             keepalive: true
         })
@@ -205,7 +208,7 @@ window.onload = function () {
     });
     // change duration
     applyDurationButton.addEventListener('click', function () {
-        duration = parseInt(durationSelect.value);
+        currentDuration = parseInt(durationSelect.value);
         resetTimer();
     });
 
@@ -213,7 +216,7 @@ window.onload = function () {
     window.addEventListener('beforeunload', function(e) {
         if (currentTimerSessionId && isTimerRunning) {
             e.preventDefault();
-            updateTimerSession(duration * 60 - remainingTime); // Update session before leaving the page
+            updateTimerSession(originalSessionDuration * 60 - remainingTime); // Update session before leaving the page
         }
     });
 

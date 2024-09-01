@@ -180,6 +180,7 @@ window.onload = function () {
             },
             body: JSON.stringify({ sessionId: currentTimerSessionId, usedTime: usedTime }),
             credentials: "same-origin",
+            keepalive: true
         })
             .then(response => response.text())
             .then(data => console.log('Session updated:', data))
@@ -206,6 +207,14 @@ window.onload = function () {
     applyDurationButton.addEventListener('click', function () {
         duration = parseInt(durationSelect.value);
         resetTimer();
+    });
+
+    // Handle page unload event
+    window.addEventListener('beforeunload', function(e) {
+        if (currentTimerSessionId && isTimerRunning) {
+            e.preventDefault();
+            updateTimerSession(duration * 60 - remainingTime); // Update session before leaving the page
+        }
     });
 
 }

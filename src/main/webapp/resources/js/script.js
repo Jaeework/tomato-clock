@@ -18,7 +18,8 @@ window.onload = function () {
             document.documentElement.style.setProperty('--color-shadow', data.shadowColor);
             document.documentElement.style.setProperty('--color-timer-font', data.txtColor);
 
-            remainingTime = data.duration * 60;
+            currentDuration = data.duration;
+            remainingTime = currentDuration * 60;
             updateDisplay();
         })
         .catch((error) => {
@@ -96,8 +97,11 @@ window.onload = function () {
     const resetButton = document.getElementById('resetButton');
 
     let timer;
-    let duration = parseInt(durationSelect.value);
-    let remainingTime = duration * 60;
+    let isTimerRunning = false; // 타이머가 동작 중인지 체크
+    let currentDuration;
+    let originalSessionDuration;
+    let remainingTime;
+    let currentTimerSessionId = document.getElementById('currentTimerSessionId').value;
 
     function updateDisplay() {
         const minutes = Math.floor(remainingTime / 60);
@@ -107,27 +111,83 @@ window.onload = function () {
     }
 
     function startTimer() {
-        timer = setInterval(function() {
-            if (remainingTime > 0) {
-                remainingTime--;
-                updateDisplay();
-            } else {
-                clearInterval(timer);
-                // 타이머 완료 시 동작 추가
-                startButton.style.display = 'inline-block';
-                stopButton.style.display = 'none';
-            }
-        }, 1000);
+        if (!currentTimerSessionId) {
+            createNewTimerSession(); // Create a new session if no current session exists
+            originalSessionDuration = currentDuration;
+        }
+
+        if(!isTimerRunning) {
+            isTimerRunning = true;
+            timer = setInterval(function() {
+                if (remainingTime > 0) {
+                    remainingTime--;
+                    updateDisplay();
+                } else {
+                    stopTimer(); // Automatically stop when time runs out
+                }
+            }, 1000);
+        }
+
     }
 
     function stopTimer() {
-        clearInterval(timer);
+        if(isTimerRunning) {
+            clearInterval(timer);
+            isTimerRunning = false;
+            if (currentTimerSessionId) {
+                const usedTime = Math.max(0, originalSessionDuration * 60 - remainingTime);
+                updateTimerSession(usedTime);
+            }
+        }
     }
 
     function resetTimer() {
-        stopTimer();
-        remainingTime = duration * 60;
+        if(currentTimerSessionId && isTimerRunning) {
+            stopTimer();
+        }
+        remainingTime = currentDuration * 60;
+        originalSessionDuration = null;
         updateDisplay();
+        currentTimerSessionId = null; // Reset current session ID
+        document.getElementById('currentTimerSessionId').value = '';
+    }
+
+    function createNewTimerSession() {
+        fetch('/api/statistics/createTimerSession', {
+            method: 'POST',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'Content-Type': 'application/json',
+                [csrfHeaderName]: csrfTokenValue,
+            },
+            credentials: "same-origin",
+        })
+            .then(response => response.text())
+            .then(data => {
+                currentTimerSessionId = data;
+                console.log("created Timer Session Id : ", currentTimerSessionId);
+                document.getElementById('currentTimerSessionId').value = currentTimerSessionId;
+            })
+            .catch(error => console.error('Error creating session:', error));
+    }
+
+    function updateTimerSession(usedTime) {
+        if (!currentTimerSessionId) return;
+
+        fetch('/api/statistics/updateTimerSession', {
+            method: 'POST',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'Content-Type': 'application/json',
+                [csrfHeaderName]: csrfTokenValue,
+            },
+            body: JSON.stringify({ sessionId: currentTimerSessionId, usedTime: Math.max(0, usedTime) }),
+            credentials: "same-origin",
+            keepalive: true
+        })
+            .then(response => response.text())
+            .then(data => console.log('Session updated:', data))
+            .catch(error => console.error('Error updating session:', error));
     }
 
     startButton.addEventListener('click', function() {
@@ -148,11 +208,17 @@ window.onload = function () {
     });
     // change duration
     applyDurationButton.addEventListener('click', function () {
-        duration = parseInt(durationSelect.value);
+        currentDuration = parseInt(durationSelect.value);
         resetTimer();
     });
 
-    // 초기 타이머 설정
-    // updateDisplay();
+    // Handle page unload event
+    window.addEventListener('beforeunload', function(e) {
+        if (currentTimerSessionId && isTimerRunning) {
+            e.preventDefault();
+            updateTimerSession(originalSessionDuration * 60 - remainingTime); // Update session before leaving the page
+        }
+    });
+
 }
 // });

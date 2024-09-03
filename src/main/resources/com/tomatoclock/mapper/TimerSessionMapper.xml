@@ -13,6 +13,21 @@
 
     </insert>
 
+    <!-- Update an existing timer session -->
+    <update id="updateTimerSession" parameterType="com.tomatoclock.domain.TimerSessionVO">
+        UPDATE tbl_session
+        SET endtime = #{endtime},
+            duration = #{duration}
+        WHERE id = #{id}
+    </update>
+
+    <!-- Select a timer session by ID -->
+    <select id="getTimerSessionById" resultType="com.tomatoclock.domain.TimerSessionVO">
+        SELECT id, userid, starttime, endtime, duration
+        FROM tbl_session
+        WHERE id = #{sessionId}
+    </select>
+
     <select id="selectThisMonthTimerSessionList" parameterType="string" resultType="com.tomatoclock.domain.TimerSessionVO">
         <![CDATA[
         SELECT * FROM tbl_session
@@ -20,6 +35,24 @@
                 AND MONTH(starttime) = MONTH(CURRENT_DATE())
                 AND YEAR(starttime) = YEAR(CURRENT_DATE())
         ]]>
+    </select>
+
+    <select id="selectSessionListByMonth" resultType="com.tomatoclock.domain.TimerSessionVO">
+        SELECT id, userid, starttime, endtime, duration
+        FROM tbl_session
+        WHERE userid = #{userid}
+            AND MONTH(starttime) = #{month}
+            AND YEAR(starttime) = #{year}
+            AND endtime IS NOT NULL
+        ORDER BY starttime ASC
+    </select>
+
+    <select id="selectSessionByDate" resultType="com.tomatoclock.domain.TimerSessionVO">
+        SELECT id, userid, starttime, endtime, duration
+        FROM tbl_session
+        WHERE userid = #{userid}
+          AND DATE(starttime) = #{date}
+        ORDER BY starttime ASC
     </select>
 
 </mapper>

@@ -4,9 +4,7 @@ import com.tomatoclock.domain.MemberVO;
 import com.tomatoclock.service.MemberService;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,19 +12,14 @@ import java.security.Principal;
 import java.util.Map;
 
 @Controller
+@RequestMapping("/api/profile")
 @Log4j2
 @AllArgsConstructor
 public class ProfileController {
 
     private MemberService memberService;
 
-    @GetMapping("/profile")
-    @PreAuthorize("isAuthenticated()")
-    public void profile() {
-
-    }
-
-    @PostMapping(value = "api/profile/update/email", consumes = "application/json")
+    @PostMapping(value = "/update/email", consumes = "application/json")
     public ResponseEntity<String> updateEmail(@RequestBody Map<String, String> params, Principal principal) {
         String email = params.get("email");
         String currentPassword = params.get("currentPassword");
@@ -45,7 +38,7 @@ public class ProfileController {
         }
     }
 
-    @PostMapping("api/profile/update/password")
+    @PostMapping("/update/password")
     public ResponseEntity<String> updatePassword(@RequestBody Map<String, String> params, Principal principal) {
         String currentPassword = params.get("currentPassword");
         String newPassword = params.get("newPassword");
@@ -75,7 +68,7 @@ public class ProfileController {
 
     }
 
-    @PostMapping("api/profile/delete")
+    @PostMapping("/delete")
     public ResponseEntity<String> deleteAccount(@RequestBody Map<String, String> params, Principal principal) {
         String password = params.get("password");
         String userId = principal.getName();

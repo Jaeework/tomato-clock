@@ -61,6 +61,10 @@ h2, h4 {
     justify-content: center;
 }
 
+.fc .fc-bg-event {
+    opacity: 1 !important;
+}
+
 .fc .fc-bg-event .fc-event-title {
     font-weight: bolder;
     font-size: 1em !important;
@@ -84,9 +88,9 @@ h2, h4 {
 }
 
 .color-box-0 { background-color: #F9F9F9; }
-.color-box-1 { background-color: #f1d7b6; }
-.color-box-2 { background-color: #e0c080; }
-.color-box-3 { background-color: #f8bc5e; }
-.color-box-4 { background-color: #FF9800; }
+.color-box-1 { background-color: #fcf8b5; }
+.color-box-2 { background-color: #fdca86; }
+.color-box-3 { background-color: #fe9e5a; }
+.color-box-4 { background-color: #fe712d; }
 .color-box-5 { background-color: #ff4500; }
 

@@ -73,10 +73,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function getColorForDuration(duration) {
         if (duration >= 43200) return '#ff4500';    // over 12 hours
-        if (duration >= 36000) return '#FF9800';    // over 10 hours
-        if (duration >= 25200) return '#f8bc5e';    // over 7 hours
-        if (duration >= 14400) return '#e0c080';    // over 4 hours
-        if (duration >= 1) return '#f1d7b6';        // over 1 second
+        if (duration >= 36000) return '#fe712d';    // over 10 hours
+        if (duration >= 25200) return '#fe9e5a';    // over 7 hours
+        if (duration >= 14400) return '#fdca86';    // over 4 hours
+        if (duration >= 1) return '#fcf8b5';        // over 1 second
         return '#F9F9F9';   // Default
     }
 

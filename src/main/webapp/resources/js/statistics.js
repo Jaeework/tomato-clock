@@ -18,24 +18,27 @@ document.addEventListener('DOMContentLoaded', function() {
 
             $.getJSON('/api/statistics/getStatistics/' + year + "/" + month, function(data) {
                 const dailyTotals = data.dailyTotals;
+                const dailyMaxDurations = data.dailyMaxDurations;
                 const sessions = data.sessions;
 
                 monthlyTotal = 0;
 
                 const events = Object.keys(dailyTotals).map(date => {
-                    const duration = dailyTotals[date];
-                    monthlyTotal += duration;
+                    const totalDuration = dailyTotals[date];
+                    const maxDuration = dailyMaxDurations[date];
+                    monthlyTotal += totalDuration;
 
                     return {
-                        title: `${Math.floor(duration / 3600).toString().padStart(2, '0')}:${Math.floor((duration % 3600) / 60).toString().padStart(2, '0')}`,
+                        title: `${Math.floor(totalDuration / 3600).toString().padStart(2, '0')}:${Math.floor((totalDuration % 3600) / 60).toString().padStart(2, '0')}`,
                         start: date,
                         allDay: true,
                         display: 'background',
-                        backgroundColor: getColorForDuration(duration),
-                        borderColor: getColorForDuration(duration),
+                        backgroundColor: getColorForDuration(totalDuration),
+                        borderColor: getColorForDuration(totalDuration),
                         textColor: '#000000',
                         extendedProps: {
-                            duration: duration,
+                            totalDuration: totalDuration,
+                            maxDuration: maxDuration,
                             sessions: sessions.filter(session => {
                                 // starttime을 ISO 문자열로 변환하고 날짜 부분만 비교
                                 const startDateStr = new Date(session.starttime).toISOString().split('T')[0];
@@ -54,7 +57,7 @@ document.addEventListener('DOMContentLoaded', function() {
         eventClick: function(info) {
             const date = info.event.startStr;
             const selectedSessions = info.event.extendedProps.sessions;
-            displayDayStats(date, info.event.extendedProps.duration, selectedSessions);
+            displayDayStats(date, info.event.extendedProps.totalDuration, info.event.extendedProps.maxDuration, selectedSessions);
         }
     });
 
@@ -80,20 +83,27 @@ document.addEventListener('DOMContentLoaded', function() {
         return '#F9F9F9';   // Default
     }
 
-    function displayDayStats(date, totalDuration, sessions) {
+    function displayDayStats(date, totalDuration, maxDuration, sessions) {
         const startTime = sessions.length > 0 ? new Date(sessions[0].starttime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }) : '';
         const endTime = sessions.length > 0 ? new Date(sessions[sessions.length - 1].endtime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }) : '';
-        const hours = Math.floor(totalDuration / 3600);
-        const minutes = Math.floor((totalDuration % 3600) / 60);
-        const seconds = totalDuration % 60;
 
         let statsHtml = `
             <h5 class="stat-date mt-4 mb-4">${date}</h5>
-            <p class="stat-item mb-4"><strong>총 집중 시간</strong><br/> ${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}</p>
+            <p class="stat-item mb-4"><strong>총 집중 시간</strong><br/> ${formatDuration(totalDuration)}</p>
+            <p class="stat-item mb-4"><strong>최대 집중 시간</strong><br/> ${formatDuration(maxDuration)}</p>
             <p class="stat-item mb-4"><strong>시작시간</strong><br/> ${startTime}</p>
             <p class="stat-item mb-4"><strong>종료시간</strong><br/> ${endTime}</p>
         `;
 
         document.getElementById('dayStats').innerHTML = statsHtml;
     }
+
+    function formatDuration(seconds) {
+        const hours = Math.floor(seconds / 3600);
+        const minutes = Math.floor((seconds % 3600) / 60);
+        const remainingSeconds = seconds % 60;
+
+        return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
+    }
+
 });

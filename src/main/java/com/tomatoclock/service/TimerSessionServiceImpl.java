@@ -70,16 +70,20 @@ public class TimerSessionServiceImpl implements TimerSessionService {
     public Map<String, Object> getStatistics(String userId, int year, int month) {
         List<TimerSessionVO> sessions = mapper.selectSessionListByMonth(userId, month, year);
         Map<String, Object> statistics = new HashMap<>();
-
         Map<String, Integer> dailyTotals = new HashMap<>();
+        Map<String, Integer> dailyMaxDurations = new HashMap<>();
 
         if (!sessions.isEmpty()) {
             for (TimerSessionVO session : sessions) {
                 String dateKey = new SimpleDateFormat("yyyy-MM-dd").format(session.getStarttime());
-                dailyTotals.put(dateKey, dailyTotals.getOrDefault(dateKey, 0) + session.getDuration());
+                int duration = session.getDuration();
+
+                dailyTotals.put(dateKey, dailyTotals.getOrDefault(dateKey, 0) + duration);
+                dailyMaxDurations.put(dateKey, Math.max(dailyMaxDurations.getOrDefault(dateKey, 0), duration));
             }
         }
 
+        statistics.put("dailyMaxDurations", dailyMaxDurations); // 일별 최대 집중 시간 데이터
         statistics.put("dailyTotals", dailyTotals);  // 일별 총 시간 데이터
         statistics.put("sessions", sessions);        // 전체 세션 데이터
 

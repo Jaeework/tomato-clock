@@ -118,6 +118,7 @@ window.onload = function () {
             },
             body: JSON.stringify({ "bgImgUrl" : bgImgUrl }),
             credentials: "same-origin",
+            keepalive: true
         })
         .then(response => response.text())
         .then(data => data === 'success')
@@ -343,6 +344,20 @@ window.onload = function () {
         if (currentTimerSessionId && isTimerRunning) {
             e.preventDefault();
             updateTimerSession(originalSessionDuration * 60 - remainingTime); // Update session before leaving the page
+        }
+        if (tempBgImageUrl) {
+            e.preventDefault();
+            deleteImageFile(tempBgImageUrl)
+                .then(success => {
+                    if (success) {
+                        // 임시 변수 초기화
+                        tempBgImageUuid = null;
+                        tempBgImageName = null;
+                        tempBgImageUrl = null;
+                    } else {
+                        console.error('Failed to delete temporary background image.');
+                    }
+                });
         }
     });
 

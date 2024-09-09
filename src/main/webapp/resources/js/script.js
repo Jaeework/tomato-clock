@@ -3,6 +3,7 @@ window.onload = function () {
     const csrfHeaderName = document.querySelector('meta[name="_csrf_header"]').content;
     const csrfTokenValue = document.querySelector('meta[name="_csrf"]').content;
 
+    let isLoggedIn = false; // 로그인 상태를 저장할 변수
     let tempBgImageUuid = null;
     let tempBgImageName = null;
     let tempBgImageUrl = null;
@@ -11,6 +12,9 @@ window.onload = function () {
     fetch('/api/settings/get')
         .then(response => response.json())
         .then(data => {
+
+            isLoggedIn = data.userId !== 'anonymousUser'; // 로그인 상태 저장
+
             document.getElementById('duration').value = data.duration;
             document.getElementById('backgroundColor').value = data.bgColor;
             document.getElementById('shadowColor').value = data.shadowColor;
@@ -18,11 +22,16 @@ window.onload = function () {
             //document.getElementById('backgroundImage').value = data.bgImgName;
 
             // 로드된 설정을 적용
-            if (data.bgImgUrl) {
+            if (isLoggedIn && data.bgImgUrl) {
                 const imageUrl = `/uploads/${data.bgImgUrl}`;
                 document.body.style.backgroundImage = `url(${imageUrl})`;
                 document.body.style.backgroundSize = 'cover';
                 document.body.style.backgroundPosition = 'center';
+
+                // UI 업데이트
+                document.getElementById('fileName').textContent = data.bgImgName;
+                document.getElementById('fileInfo').style.display = 'block';
+                document.getElementById('backgroundImage').style.display = 'none';
             }
             document.documentElement.style.setProperty('--color-primary', data.bgColor);
             document.documentElement.style.setProperty('--color-shadow', data.shadowColor);
@@ -64,9 +73,8 @@ window.onload = function () {
        if(file) {
            const formData = new FormData();
            formData.append('file', file);
-           console.log("file : ", file);
 
-           fetch('/api/settings/uploadImage', {
+           fetch('/api/settings/uploadBackgroundImage', {
                method: 'POST',
                body: formData,
                headers: {
@@ -82,11 +90,37 @@ window.onload = function () {
                    tempBgImageUuid = data.uuid;
                    tempBgImageName = data.name;
                    tempBgImageUrl = data.uploadUrl;
+
+                   // UI 업데이트
+                   document.getElementById('fileName').textContent = tempBgImageName;
+                   document.getElementById('fileInfo').style.display = 'block';
+                   document.getElementById('backgroundImage').style.display = 'none';
                })
                .catch(error => console.error('Error:', error));
        }
     });
 
+    // delete background Image file
+    document.getElementById('removeFile').addEventListener('click', function (e) {
+        e.preventDefault();
+
+        // 배경 이미지 제거
+        document.body.style.backgroundImage = '';
+        document.body.style.backgroundColor = document.getElementById('backgroundColor').value;
+
+
+        // 임시 변수 초기화
+        tempBgImageUuid = null;
+        tempBgImageName = null;
+        tempBgImageUrl = null;
+
+        // UI 초기화
+        document.getElementById('backgroundImage').value = '';
+        document.getElementById('backgroundImage').style.display = 'block';
+        document.getElementById('fileName').textContent = '';
+        document.getElementById('fileInfo').style.display = 'none';
+
+    });
 
     // Save User Setting
     document.getElementById('saveSettings').addEventListener('click', function() {

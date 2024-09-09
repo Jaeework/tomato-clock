@@ -65,8 +65,8 @@ public class UserSettingController {
         return ResponseEntity.ok(userSetting);
     }
 
-    @PostMapping(value = "/uploadImage", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Map<String, String>> uploadImage(@RequestParam("file") MultipartFile file) {
+    @PostMapping(value = "/uploadBackgroundImage", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Map<String, String>> uploadBackgroundImage(@RequestParam("file") MultipartFile file) {
         try {
 
             String uploadFolder = "D:" + File.separator + "upload";
@@ -96,7 +96,7 @@ public class UserSettingController {
             Map<String, String> response = new HashMap<>();
             response.put("uploadUrl", uploadUrl);
             response.put("uuid", uuid);
-            response.put("name", file.getOriginalFilename());
+            response.put("name", uploadFileName);
 
             return ResponseEntity.ok(response);
         } catch (IOException e) {
@@ -114,6 +114,28 @@ public class UserSettingController {
         String str = sdf.format(date);
 
         return str.replace("-", File.separator);
+    }
+
+    @PostMapping(value = "/deleteBackgroundImage", produces = MediaType.TEXT_PLAIN_VALUE)
+    public ResponseEntity<String> deleteBackgroundImage(@RequestBody(required = false) Map<String, String> params) {
+        String bgImgUrl = params != null ? params.get("bgImgUrl") : null;
+
+        if (bgImgUrl != null && !bgImgUrl.isEmpty()) {
+            deleteBackgroundImageFile(bgImgUrl);
+            return ResponseEntity.ok("success");
+        } else {
+            return ResponseEntity.ok("no image to delete");
+        }
+    }
+
+    private void deleteBackgroundImageFile(String bgImgUrl) {
+        if (bgImgUrl != null && !bgImgUrl.isEmpty()) {
+            String filePath = "D:/upload/" + bgImgUrl;
+            File file = new File(filePath);
+            if (file.exists()) {
+                file.delete();
+            }
+        }
     }
 
 }

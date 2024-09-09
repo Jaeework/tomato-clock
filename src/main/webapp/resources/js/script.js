@@ -4,6 +4,8 @@ window.onload = function () {
     const csrfTokenValue = document.querySelector('meta[name="_csrf"]').content;
 
     let isLoggedIn = false; // 로그인 상태를 저장할 변수
+    let originalBgImageInfo = null; // 원래의 배경 이미지 정보를 저장할 변수
+
     let tempBgImageUuid = null;
     let tempBgImageName = null;
     let tempBgImageUrl = null;
@@ -23,6 +25,12 @@ window.onload = function () {
 
             // 로드된 설정을 적용
             if (isLoggedIn && data.bgImgUrl) {
+                originalBgImageInfo = {
+                    uuid: data.bgImgUuid,
+                    name: data.bgImgName,
+                    url: data.bgImgUrl
+                };
+
                 const imageUrl = `/uploads/${data.bgImgUrl}`;
                 document.body.style.backgroundImage = `url(${imageUrl})`;
                 document.body.style.backgroundSize = 'cover';
@@ -100,6 +108,25 @@ window.onload = function () {
        }
     });
 
+    function deleteImageFile(bgImgUrl) {
+        return fetch('/api/settings/deleteBackgroundImage', {
+            method: 'POST',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'Content-Type': 'application/json',
+                [csrfHeaderName]: csrfTokenValue,
+            },
+            body: JSON.stringify({ "bgImgUrl" : bgImgUrl }),
+            credentials: "same-origin",
+        })
+        .then(response => response.text())
+        .then(data => data === 'success')
+        .catch(error => {
+            console.error('Error:', error);
+            return false;
+        });
+    }
+
     // delete background Image file
     document.getElementById('removeFile').addEventListener('click', function (e) {
         e.preventDefault();
@@ -108,6 +135,17 @@ window.onload = function () {
         document.body.style.backgroundImage = '';
         document.body.style.backgroundColor = document.getElementById('backgroundColor').value;
 
+        // 이미지 파일 삭제
+        if(tempBgImageUrl) {
+            deleteImageFile(tempBgImageUrl)
+                .then(success => {
+                    if (success) {
+                        console.log('Temporary background image deleted successfully.');
+                    } else {
+                        console.error('Failed to delete temporary background image.');
+                    }
+                });
+        }
 
         // 임시 변수 초기화
         tempBgImageUuid = null;

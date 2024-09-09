@@ -3,6 +3,10 @@ window.onload = function () {
     const csrfHeaderName = document.querySelector('meta[name="_csrf_header"]').content;
     const csrfTokenValue = document.querySelector('meta[name="_csrf"]').content;
 
+    let tempBgImageUuid = null;
+    let tempBgImageName = null;
+    let tempBgImageUrl = null;
+
     // Fetch User Setting
     fetch('/api/settings/get')
         .then(response => response.json())
@@ -11,9 +15,15 @@ window.onload = function () {
             document.getElementById('backgroundColor').value = data.bgColor;
             document.getElementById('shadowColor').value = data.shadowColor;
             document.getElementById('textColor').value = data.txtColor;
-            document.getElementById('backgroundImage').value = data.bgImgName;
+            //document.getElementById('backgroundImage').value = data.bgImgName;
 
             // 로드된 설정을 적용
+            if (data.bgImgUrl) {
+                const imageUrl = `/uploads/${data.bgImgUrl}`;
+                document.body.style.backgroundImage = `url(${imageUrl})`;
+                document.body.style.backgroundSize = 'cover';
+                document.body.style.backgroundPosition = 'center';
+            }
             document.documentElement.style.setProperty('--color-primary', data.bgColor);
             document.documentElement.style.setProperty('--color-shadow', data.shadowColor);
             document.documentElement.style.setProperty('--color-timer-font', data.txtColor);
@@ -48,17 +58,46 @@ window.onload = function () {
         document.documentElement.style.setProperty('--color-timer-font', this.value);
     });
 
+    // change background Image
+    document.getElementById('backgroundImage').addEventListener('change', function(e) {
+       const file = e.target.files[0];
+       if(file) {
+           const formData = new FormData();
+           formData.append('file', file);
+           console.log("file : ", file);
+
+           fetch('/api/settings/uploadImage', {
+               method: 'POST',
+               body: formData,
+               headers: {
+                   [csrfHeaderName]: csrfTokenValue,
+               },
+           })
+               .then(response => response.json())
+               .then(data => {
+                   const imageUrl = `/uploads/${data.uploadUrl}`;
+                   document.body.style.backgroundImage = `url(${imageUrl})`;
+                   document.body.style.backgroundSize = 'cover';
+                   document.body.style.backgroundPosition = 'center';
+                   tempBgImageUuid = data.uuid;
+                   tempBgImageName = data.name;
+                   tempBgImageUrl = data.uploadUrl;
+               })
+               .catch(error => console.error('Error:', error));
+       }
+    });
+
 
     // Save User Setting
     document.getElementById('saveSettings').addEventListener('click', function() {
         const settings = {
-            //userId: "userId", // 사용자 ID를 동적으로 설정해야 함
             duration: parseInt(document.getElementById('duration').value),
             txtColor: document.getElementById('textColor').value,
             shadowColor: document.getElementById('shadowColor').value,
             bgColor: document.getElementById('backgroundColor').value,
-            bgImgUuid: null,
-            bgImgName: null
+            bgImgUuid: tempBgImageUuid,
+            bgImgName: tempBgImageName,
+            bgImgUrl: tempBgImageUrl
         };
 
         fetch('/api/settings/save', {
@@ -75,6 +114,9 @@ window.onload = function () {
             .then(data => {
                 if(data === 'success') {
                     alert('Your Setting has been successfully saved.');
+                    tempBgImageUuid = null;
+                    tempBgImageName = null;
+                    tempBgImageUrl = null;
                 }
             })
             .catch((error) => {

@@ -4,15 +4,16 @@
 <mapper namespace="com.tomatoclock.mapper.UserSettingMapper">
 
     <insert id="saveUserSetting">
-        INSERT INTO tbl_user_setting (userid, duration, txtColor, shadowColor, bgColor, bgImgUuid, bgImgName)
-        VALUES (#{userId}, #{duration}, #{txtColor}, #{shadowColor}, #{bgColor}, #{bgImgUuid}, #{bgImgName})
+        INSERT INTO tbl_user_setting (userid, duration, txtColor, shadowColor, bgColor, bgImgUuid, bgImgName, bgImgUrl)
+        VALUES (#{userId}, #{duration}, #{txtColor}, #{shadowColor}, #{bgColor}, #{bgImgUuid}, #{bgImgName}, #{bgImgUrl})
             ON DUPLICATE KEY UPDATE
                                  duration=#{duration},
                                  txtColor=#{txtColor},
                                  shadowColor=#{shadowColor},
                                  bgColor=#{bgColor},
                                  bgImgUuid=#{bgImgUuid},
-                                 bgImgName=#{bgImgName}
+                                 bgImgName=#{bgImgName},
+                                 bgImgUrl=#{bgImgUrl}
     </insert>
 
     <select id="selectUserSetting" parameterType="string" resultType="com.tomatoclock.domain.UserSettingVO">

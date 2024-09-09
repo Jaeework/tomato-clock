@@ -162,14 +162,19 @@ window.onload = function () {
 
     // Save User Setting
     document.getElementById('saveSettings').addEventListener('click', function() {
+        if(!isLoggedIn) {
+            alert('To save your settings, please log in or create an account.');
+            return
+        }
+
         const settings = {
             duration: parseInt(document.getElementById('duration').value),
             txtColor: document.getElementById('textColor').value,
             shadowColor: document.getElementById('shadowColor').value,
             bgColor: document.getElementById('backgroundColor').value,
-            bgImgUuid: tempBgImageUuid,
-            bgImgName: tempBgImageName,
-            bgImgUrl: tempBgImageUrl
+            bgImgUuid: tempBgImageUuid || (originalBgImageInfo ? originalBgImageInfo.uuid : null),
+            bgImgName: tempBgImageName || (originalBgImageInfo ? originalBgImageInfo.name : null),
+            bgImgUrl: tempBgImageUrl || (originalBgImageInfo ? originalBgImageInfo.url : null)
         };
 
         fetch('/api/settings/save', {
@@ -186,6 +191,13 @@ window.onload = function () {
             .then(data => {
                 if(data === 'success') {
                     alert('Your Setting has been successfully saved.');
+
+                    originalBgImageInfo = {
+                        uuid: settings.bgImgUuid,
+                        name: settings.bgImgName,
+                        url: settings.bgImgUrl
+                    };
+
                     tempBgImageUuid = null;
                     tempBgImageName = null;
                     tempBgImageUrl = null;

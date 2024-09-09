@@ -33,6 +33,14 @@ public class UserSettingController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userId = authentication.getName();
 
+        UserSettingVO existingSetting = userSettingService.getUserSettingByUserId(userId);
+        if (existingSetting != null && existingSetting.getBgImgUrl() != null) {
+            // 새 설정의 bgImgUrl이 null이거나 기존 URL과 다른 경우 기존 파일 삭제
+            if (userSetting.getBgImgUrl() == null || !existingSetting.getBgImgUrl().equals(userSetting.getBgImgUrl())) {
+                deleteBackgroundImageFile(existingSetting.getBgImgUrl());
+            }
+        }
+
         userSetting.setUserId(userId);
 
         userSettingService.saveUserSetting(userSetting);

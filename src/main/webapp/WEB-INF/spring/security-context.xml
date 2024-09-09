@@ -18,6 +18,7 @@
         <security:intercept-url pattern="/resources/css/**" access="permitAll" />
         <security:intercept-url pattern="/resources/js/**" access="permitAll" />
         <security:intercept-url pattern="/resources/img/**" access="permitAll" />
+        <security:intercept-url pattern="/uploads/**" access="permitAll()" />
 
         <!-- 페이지에 대한 접근 허용 -->
         <security:intercept-url pattern="/" access="permitAll" />

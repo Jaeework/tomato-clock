@@ -13,7 +13,16 @@
 
     <mvc:resources mapping="/resources/**" location="/resources/" />
 
+    <bean id="uploadPath" class="java.lang.String">
+        <constructor-arg value="D:/upload"/>
+    </bean>
+
+    <mvc:resources mapping="/uploads/**" location="file:#{uploadPath}/" />
+
     <context:component-scan base-package="com.tomatoclock.controller" />
+
+    <bean id="multipartResolver" class="org.springframework.web.multipart.support.StandardServletMultipartResolver">
+    </bean>
 
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="prefix" value="/WEB-INF/views/" />

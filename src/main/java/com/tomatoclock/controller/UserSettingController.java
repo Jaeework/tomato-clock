@@ -5,12 +5,21 @@ import com.tomatoclock.service.UserSettingService;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @Log4j2
@@ -48,11 +57,63 @@ public class UserSettingController {
             userSetting.setDuration(25);
             userSetting.setBgImgName(null);
             userSetting.setBgImgUuid(null);
+            userSetting.setBgImgUrl(null);
         }
 
         log.warn("userSetting : " + userSetting);
 
         return ResponseEntity.ok(userSetting);
+    }
+
+    @PostMapping(value = "/uploadImage", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Map<String, String>> uploadImage(@RequestParam("file") MultipartFile file) {
+        try {
+
+            String uploadFolder = "D:" + File.separator + "upload";
+            String uploadFolderPath = getFolder();
+
+            // make folder
+            File uploadPath = new File(uploadFolder, uploadFolderPath);
+            log.info("upload path : " + uploadPath);
+
+            if(uploadPath.exists() == false) {
+                uploadPath.mkdirs();
+            }
+
+            String uploadFileName = file.getOriginalFilename();
+
+            // IE has file path
+            uploadFileName = uploadFileName.substring(uploadFileName.lastIndexOf("\\") + 1);
+            log.info("only file name : " + uploadFileName);
+
+            String uuid = UUID.randomUUID().toString();
+            String fileName = uuid + "_" + uploadFileName;
+            file.transferTo(new File(uploadPath, fileName));
+
+            String uploadUrl = uploadFolderPath.replace(File.separator, "/") + "/" + fileName;
+            log.info("uploadUrl : " + uploadUrl);
+
+            Map<String, String> response = new HashMap<>();
+            response.put("uploadUrl", uploadUrl);
+            response.put("uuid", uuid);
+            response.put("name", file.getOriginalFilename());
+
+            return ResponseEntity.ok(response);
+        } catch (IOException e) {
+            log.warn("error : " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    private String getFolder() {
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+        Date date = new Date();
+
+        String str = sdf.format(date);
+
+        return str.replace("-", File.separator);
     }
 
 }

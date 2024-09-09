@@ -34,3 +34,32 @@
     min-width: 120px;
     font-size: 1.1em;
 }
+
+/* background image input*/
+.background-image-form-group {
+    position: relative;
+    display: inline-block;
+}
+
+#fileInfo {
+    display: flex;
+    align-items: center;
+}
+
+#fileName {
+    margin-right: 1px;
+    font-size: 15px;
+}
+
+.remove-file-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+}
+
+.cancel-icon {
+    width: 1.5rem;
+    height: 1.5rem;
+    vertical-align: middle;
+}

@@ -59,9 +59,9 @@ public class UserSettingController {
         if (userSetting == null) {
             userSetting = new UserSettingVO();
             userSetting.setUserId(userId);
-            userSetting.setTxtColor("#fffff6");
-            userSetting.setBgColor("#1f2241");
-            userSetting.setShadowColor("#393e79");
+            userSetting.setTxtColor("#E4E7F0");
+            userSetting.setBgColor("#1A1E2E");
+            userSetting.setShadowColor("#3A4157");
             userSetting.setDuration(25);
             userSetting.setBgImgName(null);
             userSetting.setBgImgUuid(null);

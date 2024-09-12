@@ -134,7 +134,7 @@ window.onload = function () {
 
         // 배경 이미지 제거
         document.body.style.backgroundImage = '';
-        document.body.style.backgroundColor = document.getElementById('backgroundColor').value;
+        document.body.style.backgroundColor = document.body.style.getPropertyValue('--color-primary');
 
         // 이미지 파일 삭제
         if(tempBgImageUrl) {
@@ -238,7 +238,7 @@ window.onload = function () {
     }
 
     function startTimer() {
-        if (!currentTimerSessionId) {
+        if (isLoggedIn && !currentTimerSessionId) {
             createNewTimerSession(); // Create a new session if no current session exists
             originalSessionDuration = currentDuration;
         }
@@ -269,7 +269,7 @@ window.onload = function () {
     }
 
     function resetTimer() {
-        if(currentTimerSessionId && isTimerRunning) {
+        if(isTimerRunning) {
             stopTimer();
         }
         remainingTime = currentDuration * 60;

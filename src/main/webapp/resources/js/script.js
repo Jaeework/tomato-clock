@@ -29,7 +29,7 @@ window.onload = function () {
                 };
 
                 const imageUrl = `/uploads/${data.bgImgUrl}`;
-                document.body.style.backgroundImage = `url(${imageUrl})`;
+                document.body.style.backgroundImage = `url('${encodeURI(imageUrl)}')`;
                 document.body.style.backgroundSize = 'cover';
                 document.body.style.backgroundPosition = 'center';
 
@@ -89,7 +89,7 @@ window.onload = function () {
                .then(response => response.json())
                .then(data => {
                    const imageUrl = `/uploads/${data.uploadUrl}`;
-                   document.body.style.backgroundImage = `url(${imageUrl})`;
+                   document.body.style.backgroundImage = `url('${encodeURI(imageUrl)}')`;
                    document.body.style.backgroundSize = 'cover';
                    document.body.style.backgroundPosition = 'center';
                    tempBgImageInfo = {

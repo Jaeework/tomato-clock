@@ -34,10 +34,15 @@ public class UserSettingController {
         String userId = authentication.getName();
 
         UserSettingVO existingSetting = userSettingService.getUserSettingByUserId(userId);
-        if (existingSetting != null && existingSetting.getBgImgUrl() != null) {
-            // 새 설정의 bgImgUrl이 null이거나 기존 URL과 다른 경우 기존 파일 삭제
-            if (userSetting.getBgImgUrl() == null || !existingSetting.getBgImgUrl().equals(userSetting.getBgImgUrl())) {
-                deleteBackgroundImageFile(existingSetting.getBgImgUrl());
+        if (existingSetting != null && existingSetting.getBgImgPath() != null) {
+            // 새 설정의 배경 이미지 정보가 null이거나 기존 정보와 다른 경우 기존 파일 삭제
+            if (userSetting.getBgImgPath() == null ||
+                    !existingSetting.getBgImgUuid().equals(userSetting.getBgImgUuid())) {
+
+                String existingFilePath = existingSetting.getBgImgPath() + File.separator +
+                        existingSetting.getBgImgUuid() + "_" +
+                        existingSetting.getBgImgName();
+                deleteBackgroundImageFile(existingFilePath);
             }
         }
 
@@ -65,7 +70,7 @@ public class UserSettingController {
             userSetting.setDuration(25);
             userSetting.setBgImgName(null);
             userSetting.setBgImgUuid(null);
-            userSetting.setBgImgUrl(null);
+            userSetting.setBgImgPath(null);
         }
 
         log.warn("userSetting : " + userSetting);
@@ -98,11 +103,8 @@ public class UserSettingController {
             String fileName = uuid + "_" + uploadFileName;
             file.transferTo(new File(uploadPath, fileName));
 
-            String uploadUrl = uploadFolderPath.replace(File.separator, "/") + "/" + fileName;
-            log.info("uploadUrl : " + uploadUrl);
-
             Map<String, String> response = new HashMap<>();
-            response.put("uploadUrl", uploadUrl);
+            response.put("path", uploadFolderPath.replace(File.separator, "/"));
             response.put("uuid", uuid);
             response.put("name", uploadFileName);
 
@@ -126,19 +128,19 @@ public class UserSettingController {
 
     @PostMapping(value = "/deleteBackgroundImage", produces = MediaType.TEXT_PLAIN_VALUE)
     public ResponseEntity<String> deleteBackgroundImage(@RequestBody(required = false) Map<String, String> params) {
-        String bgImgUrl = params != null ? params.get("bgImgUrl") : null;
+        String bgFilePath = params != null ? params.get("bgFilePath") : null;
 
-        if (bgImgUrl != null && !bgImgUrl.isEmpty()) {
-            deleteBackgroundImageFile(bgImgUrl);
+        if (bgFilePath != null && !bgFilePath.isEmpty()) {
+            deleteBackgroundImageFile(bgFilePath);
             return ResponseEntity.ok("success");
         } else {
             return ResponseEntity.ok("no image to delete");
         }
     }
 
-    private void deleteBackgroundImageFile(String bgImgUrl) {
-        if (bgImgUrl != null && !bgImgUrl.isEmpty()) {
-            String filePath = "D:/upload/" + bgImgUrl;
+    private void deleteBackgroundImageFile(String bgFilePath) {
+        if (bgFilePath != null && !bgFilePath.isEmpty()) {
+            String filePath = "D:/upload/" + bgFilePath;
             File file = new File(filePath);
             if (file.exists()) {
                 file.delete();

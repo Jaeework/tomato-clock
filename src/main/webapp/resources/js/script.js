@@ -5,7 +5,7 @@ window.onload = function () {
 
     let isLoggedIn = false; // 로그인 상태를 저장할 변수
     let originalBgImageInfo = null; // 원래의 배경 이미지 정보를 저장할 변수
-    let tempBgImageInfo = null;   // uuid, name, url
+    let tempBgImageInfo = null;   // uuid, name, path
     let bgImageState  = 'original'; // 현재 배경 이미지 상태 저장 ('original || 'changed' || 'removed')
 
     // Fetch User Setting
@@ -21,14 +21,14 @@ window.onload = function () {
             document.getElementById('textColor').value = data.txtColor;
 
             // 로드된 설정을 적용
-            if (isLoggedIn && data.bgImgUrl) {
+            if (isLoggedIn && data.bgImgPath) {
                 originalBgImageInfo = {
                     uuid: data.bgImgUuid,
                     name: data.bgImgName,
-                    url: data.bgImgUrl
+                    path: data.bgImgPath
                 };
 
-                const imageUrl = `/uploads/${data.bgImgUrl}`;
+                const imageUrl = `/uploads/${data.bgImgPath}/${data.bgImgUuid}_${data.bgImgName}`;
                 document.body.style.backgroundImage = `url('${encodeURI(imageUrl)}')`;
                 document.body.style.backgroundSize = 'cover';
                 document.body.style.backgroundPosition = 'center';
@@ -88,14 +88,14 @@ window.onload = function () {
            })
                .then(response => response.json())
                .then(data => {
-                   const imageUrl = `/uploads/${data.uploadUrl}`;
+                   const imageUrl = `/uploads/${data.path}/${data.uuid}_${data.name}`;
                    document.body.style.backgroundImage = `url('${encodeURI(imageUrl)}')`;
                    document.body.style.backgroundSize = 'cover';
                    document.body.style.backgroundPosition = 'center';
                    tempBgImageInfo = {
                        uuid : data.uuid,
                        name : data.name,
-                       url : data.uploadUrl
+                       path : data.path
                    };
                    bgImageState = 'changed';
 
@@ -108,7 +108,7 @@ window.onload = function () {
        }
     });
 
-    function deleteImageFile(bgImgUrl) {
+    function deleteImageFile(bgFilePath) {
         return fetch('/api/settings/deleteBackgroundImage', {
             method: 'POST',
             headers: {
@@ -116,7 +116,7 @@ window.onload = function () {
                 'Content-Type': 'application/json',
                 [csrfHeaderName]: csrfTokenValue,
             },
-            body: JSON.stringify({ "bgImgUrl" : bgImgUrl }),
+            body: JSON.stringify({ "bgFilePath" : bgFilePath }),
             credentials: "same-origin",
             keepalive: true
         })
@@ -138,7 +138,8 @@ window.onload = function () {
 
         // 이미지 파일 삭제
         if(tempBgImageInfo) {
-            deleteImageFile(tempBgImageInfo.url)
+
+            deleteImageFile(`${tempBgImageInfo.path}/${tempBgImageInfo.uuid}_${tempBgImageInfo.name}`)
                 .then(success => {
                     if (success) {
                         console.log('Temporary background image deleted successfully.');
@@ -177,14 +178,14 @@ window.onload = function () {
                 bgImageSettings = {
                     uuid : null,
                     name : null,
-                    url : null
+                    path : null
                 };
                 break;
             default:
                 bgImageSettings = originalBgImageInfo || {
                     uuid: null,
                     name: null,
-                    url: null
+                    path: null
                 };
         }
 
@@ -195,7 +196,7 @@ window.onload = function () {
             bgColor: document.getElementById('backgroundColor').value,
             bgImgUuid: bgImageSettings.uuid || null,
             bgImgName: bgImageSettings.name || null,
-            bgImgUrl: bgImageSettings.url || null
+            bgImgPath: bgImageSettings.path || null
         };
 
         fetch('/api/settings/save', {
@@ -216,7 +217,7 @@ window.onload = function () {
                     originalBgImageInfo = {
                         uuid: settings.bgImgUuid,
                         name: settings.bgImgName,
-                        url: settings.bgImgUrl
+                        path: settings.bgImgPath
                     };
 
                     tempBgImageInfo = null;
@@ -366,7 +367,7 @@ window.onload = function () {
         }
         if (bgImageState === 'changed' && tempBgImageInfo) {
             e.preventDefault();
-            deleteImageFile(tempBgImageInfo.url)
+            deleteImageFile(`${tempBgImageInfo.path}/${tempBgImageInfo.uuid}_${tempBgImageInfo.name}`)
                 .then(success => {
                     if (success) {
                         // 임시 변수 초기화

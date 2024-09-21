@@ -13,6 +13,6 @@ public class UserSettingVO {
     private String bgColor;
     private String bgImgUuid;
     private String bgImgName;
-    private String bgImgUrl;
+    private String bgImgPath;
 
 }

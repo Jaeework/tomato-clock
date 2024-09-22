@@ -1,6 +1,4 @@
 :root {
-    font-size: 62.5%; /* 1rem = 10px */
-
     --color-primary: hsl(228, 28%, 14%);
     --color-timer-font: hsl(260, 23%, 92%);
     --color-font: hsla(0, 0%, 100%, 0.902);
@@ -16,26 +14,22 @@
 html, body {
     height: 100%;
     background-color: var(--color-primary);
-    font-size: 1.6rem;
-    font-family: 'Open sans', sans-serif;
+    font-size: 16px;
 }
 
 body {
     text-align: center;
 }
 
-p,
-img,
-h1 {
+p, img, h1 {
     color: var(--color-font);
 }
 
 h1 {
-    font-size: 3.2rem;
+    font-size: 2rem;
 }
 
 /* === CONTENT === */
-
 section {
     display: flex;
     align-items: center;
@@ -43,9 +37,9 @@ section {
 }
 
 .container {
-    width: min(42.5rem, 100%);
+    width: min(26.56rem, 100%);
     margin-inline: auto;
-    padding-inline: 2rem;
+    padding-inline: 1.25rem;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -54,12 +48,12 @@ section {
 
 .timer {
     font-size: 5em;
-    margin-top: 20%;
+    margin-top: 5%;
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 35rem;
-    height: 35rem;
+    width: 22rem;
+    height: 22rem;
     border-radius: 50%;
     box-shadow: 0px 0px 15px 10px var(--color-shadow);
     -webkit-box-shadow: 0px 0px 15px 10px var(--color-shadow);
@@ -75,23 +69,23 @@ section {
 .timerDisplay p {
     opacity: .8;
     transition: 1s ease-in;
-    font-size: 6rem;
+    font-size: 3.75rem;
     color: var(--color-timer-font);
 }
 
 .timerDisplay p:nth-of-type(2) {
     position: relative;
-    top: -.5rem;
-    margin-inline: 1rem;
+    top: -0.31rem;
+    margin-inline: 0.625rem;
 }
 
 .controls {
     display: flex;
     justify-content: space-around;
     text-align: center;
-    margin-top: 8rem;
-    padding: 1rem;
-    border-radius: 10rem;
+    margin-top: 5rem;
+    padding: 0.625rem;
+    border-radius: 6.25rem;
     box-shadow: 0px 0px 15px 10px var(--color-shadow);
     -webkit-box-shadow: 0px 0px 15px 10px var(--color-shadow);
     -moz-box-shadow: 0px 0px 15px 10px var(--color-shadow);
@@ -100,7 +94,7 @@ section {
 .controls button {
     opacity: .8;
     transition: 1s ease-in;
-    width: 10rem;
+    width: 6.25rem;
     border: none;
     background-color: transparent;
     color: var(--color-timer-font);
@@ -110,5 +104,3 @@ section {
 .controls #stopButton {
     display: none;
 }
-
-

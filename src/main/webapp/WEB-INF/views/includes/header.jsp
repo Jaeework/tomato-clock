@@ -51,11 +51,19 @@
                                     <label for="textColor" class="form-label">Text Color:</label>
                                     <input type="color" class="form-control form-control-color" id="textColor" value="#fffff6">
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group background-image-form-group">
                                     <label for="backgroundImage" class="form-label">Background Image:</label>
-                                    <input type="file" class="form-control form-control-file" id="backgroundImage">
+                                    <input type="file" class="form-control form-control-file" accept="image/*" id="backgroundImage">
+                                    <div id="fileInfo" style="display: none;">
+                                        <span id="fileName"></span>
+                                        <button id="removeFile" class="remove-file-button">
+                                            <img class="cancel-icon" src="/resources/img/cancel-icon.png" alt="Remove file">
+                                        </button>
+                                    </div>
                                 </div>
-                                <button type="button" class="btn btn-primary float-end" id="saveSettings">Save</button>
+                                <div class="save-setting-button">
+                                    <button type="button" class="btn btn-primary float-end" id="saveSettings">Save</button>
+                                </div>
                             </form>
                         </div>
                     </div>

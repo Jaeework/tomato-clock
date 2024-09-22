@@ -15,7 +15,7 @@ public class HomeController {
     }
 
     @GetMapping("/profile")
-    @PreAuthorize("isAuthenticated()")
+    //@PreAuthorize("isAuthenticated()")
     public void profile() {
 
     }

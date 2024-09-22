@@ -356,6 +356,10 @@ window.onload = function () {
     // change duration
     applyDurationButton.addEventListener('click', function () {
         currentDuration = parseInt(durationSelect.value);
+        if(isTimerRunning) {
+            startButton.style.display = 'inline-block';
+            stopButton.style.display = 'none';
+        }
         resetTimer();
     });
 

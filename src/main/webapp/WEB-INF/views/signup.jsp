@@ -6,7 +6,7 @@
 <head>
     <title>Sign Up</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/resources/css/form.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/form.css">
 </head>
 <body>
 

@@ -13,7 +13,7 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
   <!-- css -->
-  <link rel="stylesheet" href="/resources/css/form.css">
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/form.css">
 </head>
 <body>
 
@@ -109,7 +109,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
 
     <!-- script -->
-    <script src="/resources/js/profile.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/js/profile.js"></script>
 
 </body>
 </html>

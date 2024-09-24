@@ -9,7 +9,7 @@
 <meta id="_csrf_header" name="_csrf_header" content="${_csrf.headerName}"/>
 <head>
     <title>TomatoClock</title>
-    <link rel="stylesheet" href="/resources/css/header.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/header.css">
     <%
         boolean showSettings = Boolean.valueOf(request.getParameter("showSettings"));
     %>
@@ -26,7 +26,7 @@
                 <c:if test="${not empty showSettings and showSettings == true}">
                     <div class="dropdown d-inline dropstart">
                         <span class="settings-icon" id="settingsDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <img src="/resources/img/setting-icon.png" alt="user setting icon">
+                            <img src="${pageContext.request.contextPath}/resources/img/setting-icon.png" alt="user setting icon">
                         </span>
                         <div class="dropdown-menu settings-dropdown-menu border-0 shadow w-220px" aria-labelledby="settingsDropdown" data-bs-theme="dark">
                             <form id="settingsForm" class="px-4 py-3">
@@ -72,7 +72,7 @@
                 <!-- User Dropdown -->
                 <div class="dropstart dropdown d-inline dropstart">
                     <span class="user-icon" id="userDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <img src="/resources/img/profile-icon.png" alt="profile icon">
+                        <img src="${pageContext.request.contextPath}/resources/img/profile-icon.png" alt="profile icon">
                     </span>
                     <div class="dropdown-menu user-dropdown-menu border-0 shadow w-220px" aria-labelledby="userDropdown" data-bs-theme="dark">
                         <a class="dropdown-item" href="/profile">Profile</a>

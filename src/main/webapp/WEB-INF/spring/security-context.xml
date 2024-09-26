@@ -43,7 +43,7 @@
 
         <security:logout logout-success-url="/" invalidate-session="true" delete-cookies="remember-me, JSESSIONID" />
 
-        <security:remember-me token-validity-seconds="604800" />
+        <security:remember-me data-source-ref="dataSource" token-validity-seconds="604800" />
 
     </security:http>
 

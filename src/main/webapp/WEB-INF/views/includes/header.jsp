@@ -20,7 +20,7 @@
 
     <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container-fluid">
-            <a class="navbar-brand" href="/"><img src="/resources/img/tomatoclock-logo.png" alt="TomatoClock"></a>
+            <a class="navbar-brand" href="/"><img src="${pageContext.request.contextPath}/resources/img/tomatoclock-logo.png" alt="TomatoClock"></a>
             <div class="ml-auto">
                 <!-- Settings Dropdown -->
                 <c:if test="${not empty showSettings and showSettings == true}">

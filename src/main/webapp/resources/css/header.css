@@ -7,8 +7,12 @@ html, body {
     background-color: #293037ab;
 }
 
-.navbar-brand h1 {
-    font-size: 1.2rem;
+.navbar-brand {
+    padding: 0;
+}
+
+.navbar-brand img {
+    height: 2.5rem;
 }
 
 .settings-icon, .user-icon {

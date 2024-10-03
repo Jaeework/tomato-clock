@@ -21,8 +21,8 @@ window.onload = function() {
                 currentPassword : currentPassword,
             }
 
-            fetch('/api/profile/update/email', {
-                method: 'POST',
+            fetch('/api/users/me/email', {
+                method: 'PUT',
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest',
                     'Content-Type': 'application/json',
@@ -50,8 +50,8 @@ window.onload = function() {
                 confirmPassword: confirmPassword
             }
 
-            fetch('/api/profile/update/password', {
-                method: 'POST',
+            fetch('/api/users/me/password', {
+                method: 'PUT',
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest',
                     'Content-Type': 'application/json',
@@ -74,7 +74,7 @@ window.onload = function() {
         const deletePassword = document.getElementById('deletePassword').value;
 
         fetch('/api/profile/delete', {
-            method: 'POST',
+            method: 'DELETE',
             headers: {
                 'X-Requested-With': 'XMLHttpRequest',
                 'Content-Type': 'application/json',

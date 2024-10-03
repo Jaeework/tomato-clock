@@ -23,37 +23,13 @@ import java.util.UUID;
 
 @RestController
 @Log4j2
-@RequestMapping("/api/settings")
+@RequestMapping("/api/users/me/settings")
 public class UserSettingController {
+
     @Setter(onMethod_ = { @Autowired })
     private UserSettingService userSettingService;
 
-    @PostMapping(value = "/save", produces = MediaType.TEXT_PLAIN_VALUE)
-    public ResponseEntity<String> saveSetting(@RequestBody UserSettingVO userSetting) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String userId = authentication.getName();
-
-        UserSettingVO existingSetting = userSettingService.getUserSettingByUserId(userId);
-        if (existingSetting != null && existingSetting.getBgImgPath() != null) {
-            // 새 설정의 배경 이미지 정보가 null이거나 기존 정보와 다른 경우 기존 파일 삭제
-            if (userSetting.getBgImgPath() == null ||
-                    !existingSetting.getBgImgUuid().equals(userSetting.getBgImgUuid())) {
-
-                String existingFilePath = existingSetting.getBgImgPath() + File.separator +
-                        existingSetting.getBgImgUuid() + "_" +
-                        existingSetting.getBgImgName();
-                deleteBackgroundImageFile(existingFilePath);
-            }
-        }
-
-        userSetting.setUserId(userId);
-
-        userSettingService.saveUserSetting(userSetting);
-
-        return ResponseEntity.ok("success");
-    }
-
-    @GetMapping(value = "/get", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<UserSettingVO> getSetting() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userId = authentication.getName(); // 로그인한 사용자가 아닌 경우, 'anonymousUser' 를 반환
@@ -78,7 +54,33 @@ public class UserSettingController {
         return ResponseEntity.ok(userSetting);
     }
 
-    @PostMapping(value = "/uploadBackgroundImage", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(produces = MediaType.TEXT_PLAIN_VALUE)
+    public ResponseEntity<String> saveSetting(@RequestBody UserSettingVO userSetting) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userId = authentication.getName();
+
+        UserSettingVO existingSetting = userSettingService.getUserSettingByUserId(userId);
+        if (existingSetting != null && existingSetting.getBgImgPath() != null) {
+            // 새 설정의 배경 이미지 정보가 null이거나 기존 정보와 다른 경우 기존 파일 삭제
+            if (userSetting.getBgImgPath() == null ||
+                    !existingSetting.getBgImgUuid().equals(userSetting.getBgImgUuid())) {
+
+                String existingFilePath = existingSetting.getBgImgPath() + File.separator +
+                        existingSetting.getBgImgUuid() + "_" +
+                        existingSetting.getBgImgName();
+                deleteBackgroundImageFile(existingFilePath);
+            }
+        }
+
+        userSetting.setUserId(userId);
+
+        userSettingService.saveUserSetting(userSetting);
+
+        return ResponseEntity.ok("success");
+    }
+
+
+    @PostMapping(value = "/background-image", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Map<String, String>> uploadBackgroundImage(@RequestParam("file") MultipartFile file) {
         try {
 
@@ -126,7 +128,7 @@ public class UserSettingController {
         return str.replace("-", File.separator);
     }
 
-    @PostMapping(value = "/deleteBackgroundImage", produces = MediaType.TEXT_PLAIN_VALUE)
+    @DeleteMapping(value = "/background-image", produces = MediaType.TEXT_PLAIN_VALUE)
     public ResponseEntity<String> deleteBackgroundImage(@RequestBody(required = false) Map<String, String> params) {
         String bgFilePath = params != null ? params.get("bgFilePath") : null;
 

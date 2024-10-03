@@ -230,13 +230,6 @@ window.onload = function () {
     });
 
 
-    // 로그아웃 csrf 토큰 전송
-    $("#logoutButton").on("click", function (e) {
-        e.preventDefault();
-        $("#logoutForm").submit();
-    });
-
-
     // 타이머 기능 구현
     // variables
     const startButton = document.getElementById('startButton');

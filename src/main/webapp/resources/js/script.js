@@ -9,7 +9,7 @@ window.onload = function () {
     let bgImageState  = 'original'; // 현재 배경 이미지 상태 저장 ('original || 'changed' || 'removed')
 
     // Fetch User Setting
-    fetch('/api/settings/get')
+    fetch('/api/users/me/settings')
         .then(response => response.json())
         .then(data => {
 
@@ -79,7 +79,7 @@ window.onload = function () {
            const formData = new FormData();
            formData.append('file', file);
 
-           fetch('/api/settings/uploadBackgroundImage', {
+           fetch('/api/users/me/settings/background-image', {
                method: 'POST',
                body: formData,
                headers: {
@@ -109,8 +109,8 @@ window.onload = function () {
     });
 
     function deleteImageFile(bgFilePath) {
-        return fetch('/api/settings/deleteBackgroundImage', {
-            method: 'POST',
+        return fetch('/api/users/me/settings/background-image', {
+            method: 'DELETE',
             headers: {
                 'X-Requested-With': 'XMLHttpRequest',
                 'Content-Type': 'application/json',
@@ -199,7 +199,7 @@ window.onload = function () {
             bgImgPath: bgImageSettings.path || null
         };
 
-        fetch('/api/settings/save', {
+        fetch('/api/users/me/settings', {
             method: 'POST',
             headers: {
                 'X-Requested-With': 'XMLHttpRequest',

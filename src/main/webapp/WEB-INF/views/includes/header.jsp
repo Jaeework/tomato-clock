@@ -93,5 +93,14 @@
         </div>
     </nav>
 
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script>
+        // 로그아웃 csrf 토큰 전송
+        $("#logoutButton").on("click", function (e) {
+            e.preventDefault();
+            $("#logoutForm").submit();
+        });
+    </script>
+
 </body>
 </html>

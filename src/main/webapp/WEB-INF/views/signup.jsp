@@ -11,7 +11,7 @@
 <body>
 
     <div class="container form-signup w-100 mt-5 m-auto">
-        <form role="form" method="post" action="/signup" class="user">
+        <form role="form" method="post" action="/api/users" class="user">
             <h1 class="logo" onclick="location.href='/'">TomatoClock</h1>
             <h1 class="h3 mb-3 fw-normal">Sign Up</h1>
 

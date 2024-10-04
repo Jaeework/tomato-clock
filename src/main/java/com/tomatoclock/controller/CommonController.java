@@ -1,24 +1,31 @@
 package com.tomatoclock.controller;
 
-import com.tomatoclock.domain.MemberVO;
-import com.tomatoclock.mapper.MemberMapper;
-import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
+@RequestMapping("/")
 @Controller
 @Log4j2
 public class CommonController {
 
-    @Setter(onMethod_ = { @Autowired })
-    private MemberMapper memberMapper;
+    @GetMapping("/")
+    public String home() {
 
-    @Setter(onMethod_ = { @Autowired })
-    private PasswordEncoder passwordEncoder;
+        return "index";
+    }
+
+    @GetMapping("/profile")
+    //@PreAuthorize("isAuthenticated()")
+    public void profile() {
+
+    }
+
+    @GetMapping("/statistics")
+    public void statistics() {
+
+    }
 
     @GetMapping("/login")
     public String login() {
@@ -28,14 +35,6 @@ public class CommonController {
     @GetMapping("/signup")
     public String signup() {
         return "signup";
-    }
-
-    @PostMapping("/signup")
-    public String signup(MemberVO member) {
-        member.setPassword(passwordEncoder.encode(member.getPassword()));
-        memberMapper.insertUser(member);
-
-        return "redirect:/login";
     }
 
 }

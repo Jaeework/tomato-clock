@@ -42,7 +42,7 @@ public class TimerSessionController {
         return ResponseEntity.ok(sessions);
     }
 
-    @GetMapping("/{date}")
+    @GetMapping("/date/{date}")
     public ResponseEntity<Map<String, Object>> getSessionByDate(@PathVariable("date") String date, Principal principal) {
         // 특정 날짜의 세션 데이터를 반환
         String userId = principal.getName();

@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const year = fetchInfo.start.getFullYear();
             const month = fetchInfo.start.getMonth() + 1; // FullCalendar uses 0-indexed months
 
-            $.getJSON('/api/statistics/getStatistics/' + year + "/" + month, function(data) {
+            $.getJSON('/api/users/me/timer-sessions/statistics/' + year + "/" + month, function(data) {
                 const dailyTotals = data.dailyTotals;
                 const dailyMaxDurations = data.dailyMaxDurations;
                 const sessions = data.sessions;

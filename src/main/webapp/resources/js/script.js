@@ -293,7 +293,7 @@ window.onload = function () {
     }
 
     function createNewTimerSession() {
-        fetch('/api/statistics/createTimerSession', {
+        fetch('/api/users/me/timer-sessions', {
             method: 'POST',
             headers: {
                 'X-Requested-With': 'XMLHttpRequest',
@@ -314,14 +314,14 @@ window.onload = function () {
     function updateTimerSession(usedTime) {
         if (!currentTimerSessionId) return;
 
-        fetch('/api/statistics/updateTimerSession', {
-            method: 'POST',
+        fetch(`/api/users/me/timer-sessions/${currentTimerSessionId}`, {
+            method: 'PUT',
             headers: {
                 'X-Requested-With': 'XMLHttpRequest',
                 'Content-Type': 'application/json',
                 [csrfHeaderName]: csrfTokenValue,
             },
-            body: JSON.stringify({ sessionId: currentTimerSessionId, usedTime: Math.max(0, usedTime) }),
+            body: JSON.stringify({ usedTime: Math.max(0, usedTime) }),
             credentials: "same-origin",
             keepalive: true
         })

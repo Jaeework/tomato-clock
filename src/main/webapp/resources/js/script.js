@@ -76,6 +76,11 @@ window.onload = function () {
     document.getElementById('backgroundImage').addEventListener('change', function(e) {
        const file = e.target.files[0];
        if(file) {
+           if(file.size > 5 * 1024 * 1024) {
+               alert('File size cannot exceed 5MB.');
+               return;
+           }
+
            const formData = new FormData();
            formData.append('file', file);
 

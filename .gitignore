@@ -14,6 +14,8 @@
 
 # Database Properties
 src/main/resources/database.properties
+# AWS S3 Properties
+src/main/resources/aws.properties
 
 # AWS User-specific
 .idea/**/aws.xml

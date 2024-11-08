@@ -1,6 +1,7 @@
 package com.tomatoclock.controller;
 
 import com.tomatoclock.domain.UserSettingVO;
+import com.tomatoclock.service.S3UploadService;
 import com.tomatoclock.service.UserSettingService;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
@@ -28,6 +29,9 @@ public class UserSettingController {
 
     @Setter(onMethod_ = { @Autowired })
     private UserSettingService userSettingService;
+
+    @Setter(onMethod_ = { @Autowired })
+    private S3UploadService s3UploadService;
 
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<UserSettingVO> getSetting() {
@@ -68,7 +72,7 @@ public class UserSettingController {
                 String existingFilePath = existingSetting.getBgImgPath() + File.separator +
                         existingSetting.getBgImgUuid() + "_" +
                         existingSetting.getBgImgName();
-                deleteBackgroundImageFile(existingFilePath);
+                s3UploadService.deleteFile(existingFilePath);
             }
         }
 
@@ -83,70 +87,24 @@ public class UserSettingController {
     @PostMapping(value = "/background-image", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Map<String, String>> uploadBackgroundImage(@RequestParam("file") MultipartFile file) {
         try {
-
-            String uploadFolder = "D:" + File.separator + "upload";
-            String uploadFolderPath = getFolder();
-
-            // make folder
-            File uploadPath = new File(uploadFolder, uploadFolderPath);
-            log.info("upload path : " + uploadPath);
-
-            if(uploadPath.exists() == false) {
-                uploadPath.mkdirs();
-            }
-
-            String uploadFileName = file.getOriginalFilename();
-
-            // IE has file path
-            uploadFileName = uploadFileName.substring(uploadFileName.lastIndexOf("\\") + 1);
-            log.info("only file name : " + uploadFileName);
-
-            String uuid = UUID.randomUUID().toString();
-            String fileName = uuid + "_" + uploadFileName;
-            file.transferTo(new File(uploadPath, fileName));
-
-            Map<String, String> response = new HashMap<>();
-            response.put("path", uploadFolderPath.replace(File.separator, "/"));
-            response.put("uuid", uuid);
-            response.put("name", uploadFileName);
-
-            return ResponseEntity.ok(response);
-        } catch (IOException e) {
+            Map<String, String> result = s3UploadService.uploadFile(file);
+            return ResponseEntity.ok(result);
+        } catch (Exception e) {
             log.warn("error : " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 
-    private String getFolder() {
-
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-
-        Date date = new Date();
-
-        String str = sdf.format(date);
-
-        return str.replace("-", File.separator);
-    }
 
     @DeleteMapping(value = "/background-image", produces = MediaType.TEXT_PLAIN_VALUE)
     public ResponseEntity<String> deleteBackgroundImage(@RequestBody(required = false) Map<String, String> params) {
         String bgFilePath = params != null ? params.get("bgFilePath") : null;
 
         if (bgFilePath != null && !bgFilePath.isEmpty()) {
-            deleteBackgroundImageFile(bgFilePath);
+            s3UploadService.deleteFile(bgFilePath);
             return ResponseEntity.ok("success");
         } else {
             return ResponseEntity.ok("no image to delete");
-        }
-    }
-
-    private void deleteBackgroundImageFile(String bgFilePath) {
-        if (bgFilePath != null && !bgFilePath.isEmpty()) {
-            String filePath = "D:/upload/" + bgFilePath;
-            File file = new File(filePath);
-            if (file.exists()) {
-                file.delete();
-            }
         }
     }
 

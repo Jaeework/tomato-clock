@@ -14,10 +14,10 @@
     <mvc:resources mapping="/resources/**" location="/resources/" />
 
     <bean id="uploadPath" class="java.lang.String">
-        <constructor-arg value="D:/upload"/>
+        <constructor-arg value="${cloud.aws.s3.url}"/>
     </bean>
 
-    <mvc:resources mapping="/uploads/**" location="file:#{uploadPath}/" />
+    <mvc:resources mapping="/uploads/**" location="#{uploadPath}/" />
 
     <context:component-scan base-package="com.tomatoclock.controller" />
 

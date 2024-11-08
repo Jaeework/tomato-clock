@@ -1,0 +1,5 @@
+# AWS S3 Connection Settings Example
+cloud.aws.credentials.accessKey=your_access_key
+cloud.aws.credentials.secretKey=your_secret_key
+cloud.aws.s3.bucket=your_bucket_name
+cloud.aws.region.static=ap-northeast-2
